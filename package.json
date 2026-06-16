@@ -1,0 +1,17 @@
+{
+  "name": "speakeasy-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Confidential content variants behind unguessable slugs — stack-agnostic core, server adapters, CLI, and React admin.",
+  "type": "module",
+  "workspaces": [
+    "packages/core",
+    "packages/server",
+    "packages/cli",
+    "packages/admin"
+  ],
+  "scripts": {
+    "test": "npm run test --workspaces --if-present"
+  },
+  "license": "MIT"
+}
