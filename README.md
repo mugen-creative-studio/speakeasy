@@ -12,7 +12,8 @@ local admin dashboard or a CLI.
 This was extracted from a portfolio that used it to show confidential case
 studies to specific companies during a job search. The mechanism is
 content-neutral: a variant reveals a curated list of *items*, whatever those are
-for you.
+for you. For where it came from and one vocabulary caveat if you ever wire it
+back into that portfolio, see [docs/origin.md](docs/origin.md).
 
 ## Why it's safe to deploy
 
