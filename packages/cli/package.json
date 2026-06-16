@@ -1,0 +1,15 @@
+{
+  "name": "@speakeasy/cli",
+  "version": "0.1.0",
+  "description": "Command-line driver for speakeasy confidential content variants — create, list, deactivate, re-curate, and look up variants. JSON output by default so agents can drive it.",
+  "type": "module",
+  "bin": {
+    "speakeasy": "bin/speakeasy.js"
+  },
+  "files": ["bin", "src"],
+  "dependencies": {
+    "@speakeasy/core": "0.1.0",
+    "@speakeasy/server": "0.1.0"
+  },
+  "license": "MIT"
+}

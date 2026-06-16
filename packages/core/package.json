@@ -1,0 +1,17 @@
+{
+  "name": "@speakeasy/core",
+  "version": "0.1.0",
+  "description": "Framework-agnostic core for unguessable-slug confidential content variants: slug generation, manifest schema, servability and lifecycle rules.",
+  "type": "module",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./durations": "./src/durations.js"
+  },
+  "files": ["src"],
+  "scripts": {
+    "test": "node --test \"test/**/*.test.js\""
+  },
+  "license": "MIT",
+  "sideEffects": false
+}
