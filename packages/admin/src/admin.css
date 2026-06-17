@@ -3,6 +3,8 @@
  * host's CSS. To re-theme, override any of these custom properties on .sk-shell
  * (e.g. .sk-shell { --color-attention: #0a7; --font-family: 'Inter'; }). */
 
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap');
+
 .sk-shell {
   /* color */
   --color-text: #2b4159;
@@ -10,7 +12,7 @@
   --color-bg: #ffffff;
   --color-bg-component: #f7f8f9;
   --color-border: #e5e7eb;
-  --color-attention: #4f6df5;
+  --color-attention: #007aff;
   --color-accent-red: #ff0f3b;
   --color-white: #ffffff;
   --color-gray-50: #f7f8f9;
@@ -24,7 +26,7 @@
   --space-80: 80px;
 
   /* type */
-  --font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-family: 'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-size-h2: 42px;
   --line-height-h2-reg: 52px;
   --font-weight-h2-bold: 600;
@@ -43,11 +45,16 @@
   --radius-card: 8px;
   --radius-round: 9999px;
 
-  max-width: 720px;
-  margin: 0 auto;
-  padding: var(--space-40) var(--space-16) var(--space-80);
+  /* Fill the whole viewport with the dashboard's own surface and center the
+     content — so the original light styling renders correctly on any host
+     (including a dark one) instead of floating as a column on the host bg. */
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: var(--space-40) max(var(--space-16), calc((100% - 720px) / 2)) var(--space-80);
   font-family: var(--font-family);
   color: var(--color-text);
+  background: var(--color-bg);
 }
 
 .sk-shell *,
