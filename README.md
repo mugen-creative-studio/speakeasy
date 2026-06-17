@@ -15,6 +15,18 @@ content-neutral: a variant reveals a curated list of *items*, whatever those are
 for you. For where it came from and one vocabulary caveat if you ever wire it
 back into that portfolio, see [docs/origin.md](docs/origin.md).
 
+## Can you use this?
+
+- ✅ **Yes** — your site is a *coded* site in a repo that deploys to Vercel,
+  Netlify, Cloudflare, or your own server. Hand the repo to your coding agent
+  with [INSTALL.md](INSTALL.md); it takes it from there.
+- ⚠️ **Maybe, ask a developer/agent** — Webflow **Cloud** or Wix **Velo**.
+  Possible, but the server seam is custom work on their runtime.
+- ❌ **No** — drag-and-drop Squarespace, Wix, or classic Webflow with no code
+  access. speakeasy runs a little code on your site; these don't allow that.
+- 🤷 **Not sure?** Ask your coding agent: *"Can you add a serverless endpoint and
+  a catch-all route to this site?"* If yes, you're in the ✅ column.
+
 ## Why it's safe to deploy
 
 - **No admin in production.** The admin API runs only in your dev server (a Vite
@@ -51,6 +63,9 @@ back into that portfolio, see [docs/origin.md](docs/origin.md).
 npm install   # workspaces: core, server, cli, admin
 npm test      # core unit tests + server end-to-end smoke test
 ```
+
+> **Setting it up with an agent?** Point it at [INSTALL.md](INSTALL.md) — the
+> full, host-by-host guide written against [`examples/demo`](examples/demo).
 
 Then in your app:
 

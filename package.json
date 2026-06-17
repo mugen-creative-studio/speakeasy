@@ -8,7 +8,8 @@
     "packages/core",
     "packages/server",
     "packages/cli",
-    "packages/admin"
+    "packages/admin",
+    "examples/demo"
   ],
   "scripts": {
     "test": "npm run test --workspaces --if-present"
