@@ -1,8 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 
-// A two-or-more option segmented control with a sliding active pill. Lifted from
-// the portfolio's SecNav, made self-contained (its styles live in admin.css,
-// scoped under .sk-shell). `options` is [{ label, value }].
+// A two-or-more option segmented control with a sliding active pill. Self-contained
+// (its styles live in admin.css, scoped under .sk-shell). `options` is [{ label, value }].
 export default function Tabs({ options = [], defaultSelection, onChange }) {
   const [activeIndex, setActiveIndex] = useState(
     Math.max(0, options.findIndex((o) => o.value === defaultSelection)),

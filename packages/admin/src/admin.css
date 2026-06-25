@@ -46,7 +46,7 @@
   --radius-round: 9999px;
 
   /* Fill the whole viewport with the dashboard's own surface and center the
-     content — so the original light styling renders correctly on any host
+     content - so the original light styling renders correctly on any host
      (including a dark one) instead of floating as a column on the host bg. */
   width: 100%;
   min-height: 100vh;

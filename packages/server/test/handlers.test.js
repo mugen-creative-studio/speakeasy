@@ -1,6 +1,6 @@
 // End-to-end smoke test for the git storage + HTTP verifier path. Exercises the
-// real handleCreate / handlePatch flow — manifest write → git commit → git push
-// → verify-live polling — against a THROWAWAY git repo (its own bare remote) and
+// real handleCreate / handlePatch flow - manifest write → git commit → git push
+// → verify-live polling - against a THROWAWAY git repo (its own bare remote) and
 // a local stand-in for the production lookup endpoint. Nothing here touches a
 // real remote or live site.
 
@@ -18,8 +18,8 @@ import { createHttpVerifier } from '../src/verify.js'
 import { isServable } from '@speakeasy/core'
 
 // A fixed content source covering every id the tests use, all public, so the
-// orphan warning stays quiet. (Orphans never block persistence — they're only
-// dropped at serve time — but a clean source keeps assertions sharp.)
+// orphan warning stays quiet. (Orphans never block persistence - they're only
+// dropped at serve time - but a clean source keeps assertions sharp.)
 const content = {
   async items() {
     return ['learning-cloud', 'x', 'y', 'a', 'b'].map((id) => ({ id, title: id, visibility: 'public' }))
@@ -82,7 +82,7 @@ after(() => {
 })
 
 test('create: writes manifest, pushes, verifies live before reporting', async () => {
-  const result = await handleCreate(ctx, { label: 'Acme — Smoke', items: ['learning-cloud'], durationDays: 30 })
+  const result = await handleCreate(ctx, { label: 'Acme - Smoke', items: ['learning-cloud'], durationDays: 30 })
   assert.equal(result.verified, true, 'should verify the slug is live')
   assert.equal(result.state, 'live')
   assert.deepEqual(result.items, ['learning-cloud'])
