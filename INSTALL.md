@@ -142,6 +142,34 @@ Unknown, deactivated, and expired slugs all return the **same 404** — a visito
 can't detect a slug ever existed. A live slug returns `{ ids, items }`:
 `ids` is the full curated set in order; `items` carries only the private payloads.
 
+**Optional hardening — rate-limit the endpoint.** This is the one surface a slug
+guesser can script against. The `62^12` keyspace already makes brute force
+hopeless, but throttling makes a scripted run die loud and cheap. Wrap the
+handler with the built-in limiter (keyed by client IP, so it's slug-independent
+and leaks nothing about which slugs exist — a throttled caller gets `429`
+whether the guess was real or junk):
+
+```js
+import { handleLookup, createRateLimiter, clientKey } from '@speakeasy/server'
+const limiter = createRateLimiter({ limit: 60, windowMs: 60_000 }) // module scope
+export default async function (req, res) {
+  const { allowed, retryAfterMs } = limiter.hit(clientKey(req))
+  if (!allowed) {
+    res.setHeader('Retry-After', String(Math.ceil(retryAfterMs / 1000)))
+    return res.status(429).json({ error: 'rate_limited' })
+  }
+  const { status, body } = await handleLookup(ctx, req.query.slug)
+  res.status(status).json(body)
+}
+```
+
+> **Serverless caveat:** the default in-memory store only counts within one warm
+> instance — across cold starts and regions, bursts slip through. It's best-effort
+> shedding, not a hard cap. For a firm limit on a serverless host, use your
+> platform's edge rate limiting / WAF, or pass a `store` backed by a shared
+> service (Vercel KV, Upstash, Redis). On a long-lived server (Express) the
+> in-memory default is already a real limit.
+
 ## 7. Host rewrite — route `/<slug>` to the app
 
 Each platform differs. Recipes (Vercel, Netlify, Cloudflare, nginx) are in
@@ -189,6 +217,10 @@ Run these after wiring it up — and any time a technical reviewer audits the de
 - [ ] **Deploy verifies before reporting live.** With `git` storage, the
       dashboard/CLI reports success only after the HTTP verifier confirms the
       change is live (or warns that it couldn't verify before timeout).
+- [ ] **Lookup endpoint is throttled.** The lookup wraps `createRateLimiter`
+      (or platform edge rate limiting / WAF on a serverless host). A burst of
+      misses from one client gets `429`s — and the throttle is slug-independent,
+      so it never reveals a live slug.
 
 ## Not the right tool when
 

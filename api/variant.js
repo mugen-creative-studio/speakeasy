@@ -6,7 +6,7 @@
 // The manifest is imported statically so Vercel bundles it. Minting happens
 // locally with `git` storage, which commits + pushes a new manifest — that push
 // redeploys this function with the updated file.
-import { createContext, handleLookup } from '@speakeasy/server'
+import { createContext, handleLookup, createRateLimiter, clientKey } from '@speakeasy/server'
 import content from '../examples/demo/content.js'
 import manifest from '../examples/demo/variants.json' with { type: 'json' }
 
@@ -16,7 +16,18 @@ const ctx = createContext({
   lookupPath: '/api/variant',
 })
 
+// Best-effort throttle on slug-guessing. NOTE: in-memory only limits within one
+// warm serverless instance (see rate-limit.js) — fine to shed a naive script,
+// but for a hard guarantee front this with Vercel's WAF/edge rate limiting or a
+// KV-backed store. It stays slug-independent, so it never reveals a live slug.
+const limiter = createRateLimiter()
+
 export default async function handler(req, res) {
+  const { allowed, retryAfterMs } = limiter.hit(clientKey(req))
+  if (!allowed) {
+    res.setHeader('Retry-After', String(Math.ceil(retryAfterMs / 1000)))
+    return res.status(429).json({ error: 'rate_limited' })
+  }
   const slug = new URL(req.url, 'http://localhost').searchParams.get('slug') || ''
   const { status, body } = await handleLookup(ctx, slug)
   res.status(status).json(body)
