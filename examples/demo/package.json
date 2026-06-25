@@ -2,7 +2,7 @@
   "name": "speakeasy-demo",
   "private": true,
   "type": "module",
-  "description": "Runnable demo: a portfolio site whose secret variants reveal NDA'd case studies. Localhost-only, fs storage — the reference implementation INSTALL.md points at.",
+  "description": "Runnable demo: a design-studio site whose secret variants reveal NDA'd case studies. Localhost-only, fs storage, the reference implementation INSTALL.md points at.",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

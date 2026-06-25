@@ -3,15 +3,15 @@
 // private; only PRIVATE items' `data` ever travels to a visitor (public items
 // are assumed to already ship in your client bundle).
 //
-// This shape is all speakeasy needs — adapt it to read from your data files, a
-// CMS, a database, anything. (The portfolio this was extracted from maps its
-// public project catalog + a server-only private catalog into exactly this.)
+// This shape is all speakeasy needs. Adapt it to read from your data files, a
+// CMS, a database, anything: map a public catalog plus a server-only private
+// catalog into exactly this.
 
 export default {
   async items() {
     return [
       // Public: in the variant's curated set the visitor sees it in order, but
-      // its real content already ships client-side — no `data` needed here.
+      // its real content already ships client-side - no `data` needed here.
       { id: 'about', title: 'About', visibility: 'public' },
       { id: 'case-alpha', title: 'Project Alpha', meta: 'Acme Co', visibility: 'public' },
 

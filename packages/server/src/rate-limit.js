@@ -1,5 +1,5 @@
 // A tiny, dependency-free fixed-window rate limiter for the public lookup
-// endpoint — the one brute-force surface speakeasy exposes (someone scripting
+// endpoint - the one brute-force surface speakeasy exposes (someone scripting
 // slug guesses against `lookupPath`). The 62^12 keyspace already makes guessing
 // hopeless; this just makes a scripted run die loud and cheap instead of
 // quietly hammering your host.
@@ -34,7 +34,7 @@ export function createMemoryStore() {
     },
     set(key, record, ttlMs, now) {
       // Opportunistic sweep so a flood of distinct IPs can't grow the map without
-      // bound — expired windows are dropped once we cross the threshold.
+      // bound - expired windows are dropped once we cross the threshold.
       if (map.size > MEMORY_SWEEP_THRESHOLD) {
         for (const [k, e] of map) if (e.expires <= now) map.delete(k)
       }

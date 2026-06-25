@@ -5,7 +5,7 @@ import { createContext, handleLookup, createRateLimiter, clientKey } from '@spea
 import config from './speakeasy.config.js'
 
 // The public lookup endpoint, in dev. In production this is a serverless
-// function (api/variant.js) — here it's a tiny Vite middleware so the demo
+// function (api/variant.js) - here it's a tiny Vite middleware so the demo
 // runs entirely on localhost. Same handler either way: handleLookup returns a
 // plain { status, body }, and unknown / deactivated / expired all 404 alike.
 function speakeasyLookup({ config }) {

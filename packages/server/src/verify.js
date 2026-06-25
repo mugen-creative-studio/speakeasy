@@ -1,6 +1,6 @@
 // Deploy verification: after a change is pushed, confirm the live lookup
 // endpoint actually reflects it before telling the operator the URL is safe to
-// send. This closes the gap between "pushed" and "deployed" — on a static host
+// send. This closes the gap between "pushed" and "deployed" - on a static host
 // a push triggers a build that takes a minute or two.
 
 // Poll `${prodUrl}${lookupPath}?${param}=<slug>` until its status matches the
@@ -28,7 +28,7 @@ export function createHttpVerifier({
           const matches = expectLive ? res.status === 200 : res.status === 404
           if (matches) return true
         } catch {
-          // network blip during deploy — keep polling
+          // network blip during deploy - keep polling
         }
         await new Promise((r) => setTimeout(r, intervalMs))
       }
