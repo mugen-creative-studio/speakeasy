@@ -28,4 +28,9 @@ export default {
   // verifyTimeoutMs: 5 * 60 * 1000,
   // verifyIntervalMs: 5000,
   // verifyHeaders: { 'x-vercel-protection-bypass': process.env.BYPASS_TOKEN },
+
+  // Optional throttle on the lookup endpoint (the one brute-force surface).
+  // Consumed where you wrap the lookup with createRateLimiter — see INSTALL.md §6.
+  // Set `false` to disable. In-memory limiting is best-effort on serverless.
+  // lookupRateLimit: { limit: 60, windowMs: 60_000 },
 }
