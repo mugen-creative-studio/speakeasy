@@ -9,7 +9,7 @@
 //   }
 //
 // Build a ctx by hand or with createContext(config) from ./context.js. The
-// handlers know nothing about HTTP, git, or any host — that all lives behind the
+// handlers know nothing about HTTP, git, or any host - that all lives behind the
 // adapters, which is what makes the whole thing portable.
 
 import {
@@ -58,19 +58,19 @@ async function persistAndVerify(ctx, { slug, manifest, entry }) {
   return ctx.verifier.verify(slug, isServable(entry, Date.now()))
 }
 
-// GET — the toggle list for the admin Create/Edit views.
+// GET - the toggle list for the admin Create/Edit views.
 export async function handleListItems(ctx) {
   const items = await ctx.content.items()
   return { items: items.map(toRow) }
 }
 
-// GET — every variant, decorated with lifecycle state for the Manage view.
+// GET - every variant, decorated with lifecycle state for the Manage view.
 export async function handleListVariants(ctx) {
   const manifest = await ctx.storage.read()
   return { variants: Object.entries(manifest).map(([slug, entry]) => decorate(ctx, slug, entry)) }
 }
 
-// POST — mint a new slug, persist, and verify it went live.
+// POST - mint a new slug, persist, and verify it went live.
 export async function handleCreate(ctx, body) {
   const { label = '', items = [], durationDays = DEFAULT_DURATION_DAYS } = body
   const orphans = await findOrphans(ctx, items)
@@ -82,7 +82,7 @@ export async function handleCreate(ctx, body) {
   return { ...decorate(ctx, slug, entry), verified, orphans }
 }
 
-// PATCH — deactivate, re-base the expiry, or re-curate the item set.
+// PATCH - deactivate, re-base the expiry, or re-curate the item set.
 export async function handlePatch(ctx, slug, body) {
   const manifest = await ctx.storage.read()
   const entry = manifest[slug]
@@ -114,7 +114,7 @@ export async function handlePatch(ctx, slug, body) {
   return { ...decorate(ctx, slug, entry), verified, orphans }
 }
 
-// The public lookup — the production endpoint a visitor's slug request hits.
+// The public lookup - the production endpoint a visitor's slug request hits.
 // Returns a plain { status, body } so any host (serverless function, Express
 // route) can map it onto its own response object. Unknown, deactivated, and
 // expired all return the same 404 so no one can detect a slug ever existed.
@@ -132,7 +132,7 @@ export async function handleLookup(ctx, slug, now = Date.now()) {
     console.warn(`[speakeasy] "${entry.label || 'unlabeled'}" references unknown ids: ${orphans.join(', ')}`)
   }
 
-  // Only private items' data needs to travel — the public catalog already ships
+  // Only private items' data needs to travel - the public catalog already ships
   // in the client. `ids` carries the full curated set (public + private) so the
   // client can render exactly that set, in order, hiding public items this
   // variant chose to omit.

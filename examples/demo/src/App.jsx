@@ -2,7 +2,7 @@ import { useEffect, useState, lazy, Suspense } from 'react'
 import { PUBLIC_CASES } from './publicCatalog.js'
 
 // The admin dashboard is lazy-loaded and gated behind import.meta.env.DEV, so
-// its code AND styles are tree-shaken out of the production bundle entirely —
+// its code AND styles are tree-shaken out of the production bundle entirely -
 // mirroring the real model where the admin only ever runs on the operator's
 // machine. In a prod build AdminRoute is null and /admin falls through to the
 // same indistinguishable 404 as any junk path.
@@ -35,7 +35,7 @@ export default function App() {
   return <Variant slug={decodeURIComponent(path.slice(1))} />
 }
 
-// The site shell. Identical for the public view and any variant — only the set
+// The site shell. Identical for the public view and any variant - only the set
 // of cases differs. That sameness is the point: a visitor can't tell a curated
 // variant from the plain public site.
 function Site({ cases }) {
@@ -59,7 +59,7 @@ function Site({ cases }) {
       </ul>
       <footer className="site-footer">
         <span>© Atelier</span>
-        {/* Demo affordance, dev only — a real deploy never advertises (or ships) the dashboard. */}
+        {/* Demo affordance, dev only - a real deploy never advertises (or ships) the dashboard. */}
         {import.meta.env.DEV && (
           <a className="demo-link" href="/admin">demo: open the dashboard →</a>
         )}
@@ -100,7 +100,7 @@ function Variant({ slug }) {
 }
 
 // The indistinguishable dead end. A deactivated/expired/unknown slug all land
-// here — identical to typing any nonsense path. Nothing hints a slug ever lived.
+// here - identical to typing any nonsense path. Nothing hints a slug ever lived.
 function NotFound() {
   return (
     <main className="site notfound">

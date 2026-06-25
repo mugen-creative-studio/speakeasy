@@ -3,7 +3,7 @@
 // human-readable rendering. Non-zero exit on error, with { error } on stdout.
 //
 //   speakeasy items
-//   speakeasy create --label "Acme — Spring" --items a,b,c --duration 30
+//   speakeasy create --label "Acme - Spring" --items a,b,c --duration 30
 //   speakeasy list [--all]
 //   speakeasy deactivate <slug>
 //   speakeasy set-duration <slug> --duration 7      (--duration none = no expiry)
@@ -95,7 +95,7 @@ function renderPretty(data) {
 
 async function main() {
   // Parse everything first so global flags (--root, --config, --pretty) may
-  // appear anywhere — before or after the command and its arguments.
+  // appear anywhere - before or after the command and its arguments.
   const { positional, flags } = parseArgs(process.argv.slice(2))
   const [command, ...args] = positional
   const pretty = Boolean(flags.pretty)
@@ -161,7 +161,7 @@ function requireSlug(args) {
   return slug
 }
 
-const HELP = `speakeasy — confidential content variants
+const HELP = `speakeasy - confidential content variants
 
 Usage:
   speakeasy items                                 list available content items

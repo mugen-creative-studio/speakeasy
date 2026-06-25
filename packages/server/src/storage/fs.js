@@ -2,7 +2,7 @@
 // deploy. Use this when the manifest lives on a server with a writable disk (a
 // long-running Node host, a database-backed setup wrapped to look like this),
 // or for local development against a manifest that some other process serves.
-// Pair it with noopVerifier — there is no separate deploy to wait for.
+// Pair it with noopVerifier - there is no separate deploy to wait for.
 
 import { readFileSync, writeFileSync } from 'node:fs'
 import path from 'node:path'

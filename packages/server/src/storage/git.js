@@ -1,8 +1,7 @@
 // Git-backed storage adapter: the manifest is a committed file, and a change is
-// persisted by writing it, committing, and pushing. This is the original
-// portfolio model — the deployed site reads the manifest from the repo, so a
-// push *is* the deploy. Pair it with the HTTP verifier to confirm the push went
-// live before reporting success.
+// persisted by writing it, committing, and pushing. The deployed site reads the
+// manifest from the repo, so a push is the deploy. Pair it with the HTTP verifier
+// to confirm the push went live before reporting success.
 
 import { readFileSync, writeFileSync } from 'node:fs'
 import { execFile } from 'node:child_process'
@@ -24,7 +23,7 @@ export function createGitStorage({ root = process.cwd(), manifestPath = 'api/_va
     await run('git', ['add', rel], { cwd: root })
     // Skip the commit when nothing actually changed (e.g. re-saving an
     // identical set). `git diff --cached --quiet` exits 0 when nothing is
-    // staged, non-zero (throws) when there is — otherwise `git commit` would
+    // staged, non-zero (throws) when there is - otherwise `git commit` would
     // exit non-zero on an empty diff and the whole call would 500.
     let staged = true
     try {
