@@ -3,12 +3,12 @@
 This guide is written for the **coding agent** (or developer) wiring speakeasy
 into a site. The site owner hands you their repo and this file; you do the
 integration. The end state: the owner can mint a secret URL from a local
-dashboard, hand it to one person, and revoke it — with no admin surface and no
+dashboard, hand it to one person, and revoke it - with no admin surface and no
 private data on the deployed site until a live slug asks for it.
 
 A complete, runnable reference lives in [`examples/demo`](examples/demo). It
 wires every seam below with the `fs` adapter on localhost. **Read it first and
-mirror its structure** — it is the canonical example this guide describes.
+mirror its structure** - it is the canonical example this guide describes.
 
 ---
 
@@ -16,17 +16,17 @@ mirror its structure** — it is the canonical example this guide describes.
 
 speakeasy needs three things from the host. Confirm all three before starting:
 
-1. **A server-side endpoint** you can deploy — somewhere to run `handleLookup`
+1. **A server-side endpoint** you can deploy - somewhere to run `handleLookup`
    at request time (a serverless/edge function, or any Node route).
-2. **Routing control** — the ability to route an arbitrary top-level
+2. **Routing control** - the ability to route an arbitrary top-level
    `/<slug>` to the app, and to expose the lookup endpoint at a fixed path.
-3. **Your own client code** — the app can read the slug, call the endpoint, and
+3. **Your own client code** - the app can read the slug, call the endpoint, and
    render the result.
 
 ✅ Coded sites on Vercel / Netlify / Cloudflare / self-hosted Node.
-⚠️ Webflow **Cloud** (Cloudflare Workers) and Wix **Velo** — possible, but you
+⚠️ Webflow **Cloud** (Cloudflare Workers) and Wix **Velo** - possible, but you
 reimplement the server seam on their runtime using `@speakeasy/core`.
-❌ No-code Squarespace / Wix / classic Webflow — no custom backend; not possible.
+❌ No-code Squarespace / Wix / classic Webflow - no custom backend; not possible.
 
 ---
 
@@ -39,7 +39,7 @@ npm install @speakeasy/core @speakeasy/server @speakeasy/cli @speakeasy/admin
 `@speakeasy/admin` is only needed if you mount the React dashboard (step 5a);
 the CLI (step 5b) is an alternative that needs neither React nor a dev plugin.
 
-## 2. Config — `speakeasy.config.js`
+## 2. Config - `speakeasy.config.js`
 
 One file feeds the Vite plugin, the CLI, and the lookup endpoint. See
 [`speakeasy.config.example.js`](speakeasy.config.example.js).
@@ -54,7 +54,7 @@ export default {
 }
 ```
 
-## 3. Content source — what a variant can reveal
+## 3. Content source - what a variant can reveal
 
 The single decoupling seam. Implement `items()` returning every item the admin
 can toggle. See [`examples/content.example.js`](examples/content.example.js) and
@@ -81,20 +81,20 @@ only *private* `data` travels over the wire, and only when a live slug requests
 it. If your site fetches all content per-request (no public catalog in the
 bundle), rethink what "public vs private" means for you before proceeding.
 
-## 4. Storage adapter — how the manifest persists
+## 4. Storage adapter - how the manifest persists
 
-- **`git`** — the manifest is a committed file; `persist` writes, commits, and
+- **`git`** - the manifest is a committed file; `persist` writes, commits, and
   pushes. The push *is* the deploy. Pair with the HTTP verifier (default), which
   polls `prodUrl + lookupPath` until the change is live. Use this on static
   hosts (Vercel/Netlify/Cloudflare Pages).
-- **`fs`** — write the manifest and stop. For a long-running Node host with a
+- **`fs`** - write the manifest and stop. For a long-running Node host with a
   writable disk, or local dev. Verification is a no-op.
-- **Custom** — pass `storage: { read(), persist(manifest, message), kind }` to
+- **Custom** - pass `storage: { read(), persist(manifest, message), kind }` to
   back it with a KV store, S3, a database, or a constrained runtime (Wix Velo).
 
 ## 5. The admin (operator-only, never deployed)
 
-**a) Dashboard** — mount the dev-only Vite plugin and a dev-only `/admin` route:
+**a) Dashboard** - mount the dev-only Vite plugin and a dev-only `/admin` route:
 
 ```js
 // vite.config.js
@@ -110,14 +110,14 @@ import '@speakeasy/admin/admin.css'
 export default () => <AdminApp />
 ```
 
-The plugin is `apply: 'serve'` — it exists only in the dev server and is never
+The plugin is `apply: 'serve'` - it exists only in the dev server and is never
 in a production build. That is the whole security model: **the operator keeps
 the admin secret by not deploying it.**
 
-**b) Or the CLI** — no UI, no dev plugin. JSON output by default (agent-friendly):
+**b) Or the CLI** - no UI, no dev plugin. JSON output by default (agent-friendly):
 
 ```bash
-speakeasy create --label "Acme — Spring" --items about,case-secret --duration 30
+speakeasy create --label "Acme - Spring" --items about,case-secret --duration 30
 speakeasy list
 speakeasy deactivate <slug>
 ```
@@ -138,15 +138,15 @@ export default async function (req, res) {
 }
 ```
 
-Unknown, deactivated, and expired slugs all return the **same 404** — a visitor
+Unknown, deactivated, and expired slugs all return the **same 404** - a visitor
 can't detect a slug ever existed. A live slug returns `{ ids, items }`:
 `ids` is the full curated set in order; `items` carries only the private payloads.
 
-**Optional hardening — rate-limit the endpoint.** This is the one surface a slug
+**Optional hardening - rate-limit the endpoint.** This is the one surface a slug
 guesser can script against. The `62^12` keyspace already makes brute force
 hopeless, but throttling makes a scripted run die loud and cheap. Wrap the
 handler with the built-in limiter (keyed by client IP, so it's slug-independent
-and leaks nothing about which slugs exist — a throttled caller gets `429`
+and leaks nothing about which slugs exist - a throttled caller gets `429`
 whether the guess was real or junk):
 
 ```js
@@ -164,20 +164,20 @@ export default async function (req, res) {
 ```
 
 > **Serverless caveat:** the default in-memory store only counts within one warm
-> instance — across cold starts and regions, bursts slip through. It's best-effort
+> instance - across cold starts and regions, bursts slip through. It's best-effort
 > shedding, not a hard cap. For a firm limit on a serverless host, use your
 > platform's edge rate limiting / WAF, or pass a `store` backed by a shared
 > service (Vercel KV, Upstash, Redis). On a long-lived server (Express) the
 > in-memory default is already a real limit.
 
-## 7. Host rewrite — route `/<slug>` to the app
+## 7. Host rewrite - route `/<slug>` to the app
 
 Each platform differs. Recipes (Vercel, Netlify, Cloudflare, nginx) are in
 [`docs/host-rewrites.md`](docs/host-rewrites.md). Two things must be true:
 the lookup endpoint is reachable at `prodUrl + lookupPath`, and `/<slug>` falls
 through to your SPA so client routing can read the slug.
 
-## 8. The visitor view — render the variant, or an identical dead end
+## 8. The visitor view - render the variant, or an identical dead end
 
 In the app, when the path is a slug, call the endpoint and render the curated
 set. Mirror the demo's [`App.jsx`](examples/demo/src/App.jsx):
@@ -203,10 +203,10 @@ else {
 
 ## Verification checklist (also the audit checklist)
 
-Run these after wiring it up — and any time a technical reviewer audits the deploy:
+Run these after wiring it up - and any time a technical reviewer audits the deploy:
 
 - [ ] **No private data in the public bundle.** Grep the built client output for
-      a known private payload string — it must be **absent**. Private `data`
+      a known private payload string - it must be **absent**. Private `data`
       should appear only in a live lookup response.
 - [ ] **No admin in production.** The deployed site exposes only `lookupPath`.
       The Vite plugin is `apply: 'serve'`; there is no `/admin` route or
@@ -219,13 +219,13 @@ Run these after wiring it up — and any time a technical reviewer audits the de
       change is live (or warns that it couldn't verify before timeout).
 - [ ] **Lookup endpoint is throttled.** The lookup wraps `createRateLimiter`
       (or platform edge rate limiting / WAF on a serverless host). A burst of
-      misses from one client gets `429`s — and the throttle is slug-independent,
+      misses from one client gets `429`s - and the throttle is slug-independent,
       so it never reveals a live slug.
 
 ## Not the right tool when
 
 - The secret needs real access control, an audit trail, or per-identity
-  revocation — speakeasy is **obscurity + curation + lifecycle, not auth**. URLs
+  revocation - speakeasy is **obscurity + curation + lifecycle, not auth**. URLs
   leak via history, `Referer`, and logs.
 - The host can't run any endpoint (pure static, no functions).
-- You need millions of per-user pages — this is one JSON manifest, one operator.
+- You need millions of per-user pages - this is one JSON manifest, one operator.

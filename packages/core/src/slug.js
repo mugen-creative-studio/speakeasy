@@ -8,7 +8,7 @@ const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789
 const SLUG_LENGTH = 12
 
 // base62 slug, rejection-sampled to avoid modulo bias (248 = 4 * 62). The
-// 12-char default gives 62^12 ≈ 3.2e21 possibilities — unguessable in practice.
+// 12-char default gives 62^12 ≈ 3.2e21 possibilities - unguessable in practice.
 export function generateSlug(length = SLUG_LENGTH) {
   const out = []
   while (out.length < length) {

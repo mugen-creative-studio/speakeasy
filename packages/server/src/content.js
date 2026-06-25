@@ -1,5 +1,5 @@
 // The content-source seam. This is the single place a host plugs in "what can a
-// variant reveal?" — decoupling speakeasy from any particular CMS, data file, or
+// variant reveal?" - decoupling speakeasy from any particular CMS, data file, or
 // project shape.
 //
 // A content source is an object with one async method:
@@ -14,7 +14,7 @@
 //
 // Only `data` for *private* items travels to a visitor (the public catalog is
 // assumed to already ship in the client bundle). `data` is omitted from the
-// admin list — see toRow.
+// admin list - see toRow.
 
 import { pathToFileURL } from 'node:url'
 import path from 'node:path'

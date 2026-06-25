@@ -2,8 +2,8 @@
 // slug; each entry is { label, items, createdAt, expiresAt, active }.
 //
 // "items" is the curated, ordered list of content ids this variant reveals.
-// (In the portfolio that built this, items are case-study project ids — but the
-// schema is deliberately content-neutral so any host can use it.)
+// For example, items might be case-study ids, document slugs, or photo sets,
+// but the schema is deliberately content-neutral so any host can use it.
 
 import { DEFAULT_DURATION_DAYS } from './durations.js'
 
@@ -19,7 +19,7 @@ export function buildEntry({ label = '', items = [], durationDays = DEFAULT_DURA
 
 // A variant is servable only while it is active and before its expiry. Unknown,
 // deactivated, and expired all collapse to "not servable" so the lookup
-// endpoint can return one indistinguishable 404 for every dead case — a visitor
+// endpoint can return one indistinguishable 404 for every dead case - a visitor
 // can never detect that a slug ever existed.
 export function isServable(entry, now = Date.now()) {
   if (!entry || entry.active !== true) return false
@@ -33,7 +33,7 @@ export function isServable(entry, now = Date.now()) {
 // exists. Orphans reference content renamed or removed since the variant was
 // created; callers drop them so a visitor never sees a silent gap, and the
 // dashboard can warn before saving a broken set. Order of the valid ids is
-// preserved — the curated sequence is meaningful.
+// preserved - the curated sequence is meaningful.
 export function partitionItemIds(requestedIds, validIds) {
   const known = validIds instanceof Set ? validIds : new Set(validIds)
   const valid = []

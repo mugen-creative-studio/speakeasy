@@ -210,7 +210,7 @@ function CreateView({ apiBase, items, onCreated }) {
           className="sk-input"
           value={label}
           onChange={(e) => setLabel(e.target.value)}
-          placeholder="Acme Inc — Spring 2026"
+          placeholder="Acme Inc - Spring 2026"
         />
       </label>
 
@@ -235,7 +235,7 @@ function CreateView({ apiBase, items, onCreated }) {
 
       {phase === 'done' && result && (
         <div className="sk-result-ok">
-          <span className="sk-result-label">✓ Live — verified deployed</span>
+          <span className="sk-result-label">✓ Live - verified deployed</span>
           <button type="button" className="sk-copy" onClick={() => navigator.clipboard?.writeText(result.url)}>
             {result.url}
           </button>

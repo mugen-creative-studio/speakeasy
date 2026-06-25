@@ -12,9 +12,9 @@ export default {
   // or an inline object. See examples/content.example.js.
   content: './content.js',
 
-  // 'git'  — manifest is a committed file; persist = write + commit + push,
+  // 'git'  - manifest is a committed file; persist = write + commit + push,
   //          then poll the live lookup endpoint until the change is reflected.
-  // 'fs'   — write the manifest and stop (writable-disk hosts); no verify.
+  // 'fs'   - write the manifest and stop (writable-disk hosts); no verify.
   // Or pass a custom adapter object: { read(), persist(manifest, message) }.
   storage: 'git',
 
@@ -30,7 +30,7 @@ export default {
   // verifyHeaders: { 'x-vercel-protection-bypass': process.env.BYPASS_TOKEN },
 
   // Optional throttle on the lookup endpoint (the one brute-force surface).
-  // Consumed where you wrap the lookup with createRateLimiter — see INSTALL.md §6.
+  // Consumed where you wrap the lookup with createRateLimiter - see INSTALL.md §6.
   // Set `false` to disable. In-memory limiting is best-effort on serverless.
   // lookupRateLimit: { limit: 60, windowMs: 60_000 },
 }

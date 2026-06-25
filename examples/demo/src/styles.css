@@ -82,7 +82,7 @@ body {
 .demo-link { color: var(--muted); text-decoration: none; }
 .demo-link:hover { color: var(--accent); }
 
-/* The 404 — plain and final. Identical for any dead slug or junk path. */
+/* The 404 - plain and final. Identical for any dead slug or junk path. */
 .notfound { text-align: left; }
 .notfound-msg { color: var(--muted); font-size: 16px; margin: 48px 0 16px; }
 .notfound-home { color: var(--accent); text-decoration: none; font-size: 14px; }
