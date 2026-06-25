@@ -5,3 +5,8 @@ dist/
 .bypass-token
 .env
 .env.*
+.vercel
+
+# Local screenshot/scratch output
+*.png
+.playwright-mcp/
