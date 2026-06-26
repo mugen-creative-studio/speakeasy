@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/mugen-creative-studio/speakeasy/security/advisories/new
+    about: Report security issues privately via a GitHub advisory, not a public issue (see SECURITY.md).

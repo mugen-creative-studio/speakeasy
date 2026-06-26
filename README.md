@@ -1,5 +1,9 @@
 # speakeasy
 
+[![CI](https://github.com/mugen-creative-studio/speakeasy/actions/workflows/ci.yml/badge.svg)](https://github.com/mugen-creative-studio/speakeasy/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen)
+
 Share confidential content with one person at a time, behind an unguessable
 URL, and revoke it when you're done.
 

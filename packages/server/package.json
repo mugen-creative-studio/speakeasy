@@ -4,17 +4,22 @@
   "description": "Server-side request handlers and pluggable adapters (storage, deploy-verifier, content source) for speakeasy confidential content variants. Mountable as connect/Express middleware or a Vite dev plugin.",
   "type": "module",
   "engines": { "node": ">=20" },
+  "author": "Mugen Creative Studio",
+  "repository": { "type": "git", "url": "git+https://github.com/mugen-creative-studio/speakeasy.git", "directory": "packages/server" },
+  "homepage": "https://github.com/mugen-creative-studio/speakeasy#readme",
+  "bugs": "https://github.com/mugen-creative-studio/speakeasy/issues",
   "main": "src/index.js",
   "exports": {
-    ".": "./src/index.js",
-    "./vite": "./src/vite-plugin.js"
+    ".": { "types": "./src/index.d.ts", "default": "./src/index.js" },
+    "./vite": { "types": "./src/vite-plugin.d.ts", "default": "./src/vite-plugin.js" }
   },
+  "types": "./src/index.d.ts",
   "files": ["src"],
   "scripts": {
     "test": "node --test \"test/**/*.test.js\""
   },
   "dependencies": {
-    "@speakeasy/core": "0.1.0"
+    "@speakeasy/core": "*"
   },
   "license": "MIT"
 }
