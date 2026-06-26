@@ -32,6 +32,12 @@ reimplement the server seam on their runtime using `@speakeasy/core`.
 
 ## 1. Install
 
+> **Not on npm yet.** These packages aren't published to a registry yet. Until
+> they are, vendor speakeasy: clone this repo and reference the packages via npm
+> workspaces, a local `npm link` / `file:` dependency, or a git dependency. The
+> `@speakeasy/*` names below are what your imports resolve to once linked. Once
+> published, install will simply be:
+
 ```bash
 npm install @speakeasy/core @speakeasy/server @speakeasy/cli @speakeasy/admin
 ```
