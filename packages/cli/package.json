@@ -22,8 +22,8 @@
     "src"
   ],
   "dependencies": {
-    "@speakeasy/core": "*",
-    "@speakeasy/server": "*"
+    "@speakeasy/core": "0.1.0",
+    "@speakeasy/server": "0.1.0"
   },
   "license": "MIT"
 }
