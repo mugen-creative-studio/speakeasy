@@ -21,9 +21,7 @@ export function speakeasyAdmin({ config, context, basePath = '/__speakeasy' } = 
       const root = server.config.root
       // Accept a ready-made ctx, a ctx factory, or a config to build from.
       const ctx =
-        typeof context === 'function'
-          ? context(root)
-          : context ?? createContext(config, { root })
+        typeof context === 'function' ? context(root) : (context ?? createContext(config, { root }))
       server.middlewares.use(createAdminMiddleware(ctx, { basePath }))
     },
   }

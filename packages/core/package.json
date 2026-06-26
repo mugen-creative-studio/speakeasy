@@ -3,18 +3,32 @@
   "version": "0.1.0",
   "description": "Framework-agnostic core for unguessable-slug confidential content variants: slug generation, manifest schema, servability and lifecycle rules.",
   "type": "module",
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "author": "Mugen Creative Studio",
-  "repository": { "type": "git", "url": "git+https://github.com/mugen-creative-studio/speakeasy.git", "directory": "packages/core" },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mugen-creative-studio/speakeasy.git",
+    "directory": "packages/core"
+  },
   "homepage": "https://github.com/mugen-creative-studio/speakeasy#readme",
   "bugs": "https://github.com/mugen-creative-studio/speakeasy/issues",
   "main": "src/index.js",
   "exports": {
-    ".": { "types": "./src/index.d.ts", "default": "./src/index.js" },
-    "./durations": { "types": "./src/durations.d.ts", "default": "./src/durations.js" }
+    ".": {
+      "types": "./src/index.d.ts",
+      "default": "./src/index.js"
+    },
+    "./durations": {
+      "types": "./src/durations.d.ts",
+      "default": "./src/durations.js"
+    }
   },
   "types": "./src/index.d.ts",
-  "files": ["src"],
+  "files": [
+    "src"
+  ],
   "scripts": {
     "test": "node --test \"test/**/*.test.js\""
   },

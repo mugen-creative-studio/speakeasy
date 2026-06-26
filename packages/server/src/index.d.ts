@@ -75,7 +75,11 @@ export declare function handlePatch(
     | { action: 'setItems'; items?: string[] },
 ): Promise<MutationResult | { error: string }>
 /** The public lookup. Unknown/deactivated/expired all return an identical 404. */
-export declare function handleLookup(ctx: Context, slug: string, now?: number): Promise<LookupResult>
+export declare function handleLookup(
+  ctx: Context,
+  slug: string,
+  now?: number,
+): Promise<LookupResult>
 
 export interface Config {
   prodUrl?: string

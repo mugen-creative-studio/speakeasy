@@ -12,7 +12,12 @@ const content = {
     return [
       { id: 'pub-1', title: 'Public One', visibility: 'public' },
       { id: 'pub-2', title: 'Public Two', visibility: 'public' },
-      { id: 'sec-1', title: 'Secret One', visibility: 'private', data: { id: 'sec-1', body: 'TOP SECRET' } },
+      {
+        id: 'sec-1',
+        title: 'Secret One',
+        visibility: 'private',
+        data: { id: 'sec-1', body: 'TOP SECRET' },
+      },
     ]
   },
 }
@@ -60,7 +65,9 @@ test('a 404 never carries content (no private payload leaks via a dead slug)', a
 })
 
 test('orphan ids (content removed since minting) are dropped from a live response', async () => {
-  const ctx = ctxWith({ good: { items: ['pub-1', 'ghost', 'sec-1'], active: true, expiresAt: future } })
+  const ctx = ctxWith({
+    good: { items: ['pub-1', 'ghost', 'sec-1'], active: true, expiresAt: future },
+  })
   const { body } = await handleLookup(ctx, 'good', NOW)
   assert.deepEqual(body.ids, ['pub-1', 'sec-1'], 'unknown "ghost" id is dropped, order preserved')
 })

@@ -129,7 +129,9 @@ export async function handleLookup(ctx, slug, now = Date.now()) {
   const known = new Set(all.map((i) => i.id))
   const { valid: ids, orphans } = partitionItemIds(entry.items, known)
   if (orphans.length) {
-    console.warn(`[speakeasy] "${entry.label || 'unlabeled'}" references unknown ids: ${orphans.join(', ')}`)
+    console.warn(
+      `[speakeasy] "${entry.label || 'unlabeled'}" references unknown ids: ${orphans.join(', ')}`,
+    )
   }
 
   // Only private items' data needs to travel - the public catalog already ships

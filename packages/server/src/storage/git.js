@@ -10,7 +10,10 @@ import path from 'node:path'
 
 const run = promisify(execFile)
 
-export function createGitStorage({ root = process.cwd(), manifestPath = 'api/_variants.json' } = {}) {
+export function createGitStorage({
+  root = process.cwd(),
+  manifestPath = 'api/_variants.json',
+} = {}) {
   const abs = path.isAbsolute(manifestPath) ? manifestPath : path.join(root, manifestPath)
   const rel = path.relative(root, abs)
 

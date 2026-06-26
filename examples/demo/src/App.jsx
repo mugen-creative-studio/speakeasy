@@ -61,7 +61,9 @@ function Site({ cases }) {
         <span>© Atelier</span>
         {/* Demo affordance, dev only - a real deploy never advertises (or ships) the dashboard. */}
         {import.meta.env.DEV && (
-          <a className="demo-link" href="/admin">demo: open the dashboard →</a>
+          <a className="demo-link" href="/admin">
+            demo: open the dashboard →
+          </a>
         )}
       </footer>
     </main>
@@ -108,7 +110,9 @@ function NotFound() {
         <span className="wordmark">Atelier</span>
       </header>
       <p className="notfound-msg">This page can’t be found.</p>
-      <a className="notfound-home" href="/">Back to home</a>
+      <a className="notfound-home" href="/">
+        Back to home
+      </a>
     </main>
   )
 }

@@ -3,15 +3,24 @@
   "version": "0.1.0",
   "description": "Command-line driver for speakeasy confidential content variants - create, list, deactivate, re-curate, and look up variants. JSON output by default so agents can drive it.",
   "type": "module",
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "author": "Mugen Creative Studio",
-  "repository": { "type": "git", "url": "git+https://github.com/mugen-creative-studio/speakeasy.git", "directory": "packages/cli" },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mugen-creative-studio/speakeasy.git",
+    "directory": "packages/cli"
+  },
   "homepage": "https://github.com/mugen-creative-studio/speakeasy#readme",
   "bugs": "https://github.com/mugen-creative-studio/speakeasy/issues",
   "bin": {
     "speakeasy": "bin/speakeasy.js"
   },
-  "files": ["bin", "src"],
+  "files": [
+    "bin",
+    "src"
+  ],
   "dependencies": {
     "@speakeasy/core": "*",
     "@speakeasy/server": "*"

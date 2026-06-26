@@ -28,7 +28,10 @@ test('tracks each client key (IP) independently', () => {
 })
 
 test('clientKey prefers the first x-forwarded-for entry, else the socket', () => {
-  assert.equal(clientKey({ headers: { 'x-forwarded-for': '203.0.113.7, 10.0.0.1' } }), '203.0.113.7')
+  assert.equal(
+    clientKey({ headers: { 'x-forwarded-for': '203.0.113.7, 10.0.0.1' } }),
+    '203.0.113.7',
+  )
   assert.equal(clientKey({ socket: { remoteAddress: '127.0.0.1' } }), '127.0.0.1')
   assert.equal(clientKey({}), 'unknown')
 })

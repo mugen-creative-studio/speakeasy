@@ -109,7 +109,8 @@ function ItemToggles({ items, orderedIds, onToggle, onReorder }) {
     setOverIdx(null)
   }
 
-  const meta = (p) => `${p.visibility === 'private' ? 'Private' : 'Public'}${p.meta ? ` · ${p.meta}` : ''}`
+  const meta = (p) =>
+    `${p.visibility === 'private' ? 'Private' : 'Public'}${p.meta ? ` · ${p.meta}` : ''}`
 
   return (
     <ul className="sk-toggle-list">
@@ -192,7 +193,11 @@ function CreateView({ apiBase, items, onCreated }) {
     setPhase('working')
     setResult(null)
     try {
-      const r = await sendJSON(`${apiBase}/variants`, 'POST', { label, items: orderedIds, durationDays })
+      const r = await sendJSON(`${apiBase}/variants`, 'POST', {
+        label,
+        items: orderedIds,
+        durationDays,
+      })
       setResult(r)
       setPhase(r.verified ? 'done' : 'error')
       onCreated?.()
@@ -236,7 +241,11 @@ function CreateView({ apiBase, items, onCreated }) {
       {phase === 'done' && result && (
         <div className="sk-result-ok">
           <span className="sk-result-label">✓ Live - verified deployed</span>
-          <button type="button" className="sk-copy" onClick={() => navigator.clipboard?.writeText(result.url)}>
+          <button
+            type="button"
+            className="sk-copy"
+            onClick={() => navigator.clipboard?.writeText(result.url)}
+          >
             {result.url}
           </button>
           <span className="sk-result-meta">Click to copy</span>
@@ -283,13 +292,19 @@ function VariantRow({ apiBase, variant, items, onChanged }) {
     setError(null)
     setOrphans([])
     try {
-      const result = await sendJSON(`${apiBase}/variants/${encodeURIComponent(variant.slug)}`, 'PATCH', body)
+      const result = await sendJSON(
+        `${apiBase}/variants/${encodeURIComponent(variant.slug)}`,
+        'PATCH',
+        body,
+      )
       if (result?.error) {
         setError(`Failed: ${result.error}`)
         return
       }
       if (!result?.verified) {
-        setError('Persisted, but could not verify the change went live before the timeout. Check the deploy before relying on it.')
+        setError(
+          'Persisted, but could not verify the change went live before the timeout. Check the deploy before relying on it.',
+        )
         return
       }
       setOrphans(result.orphans ?? [])
@@ -331,7 +346,12 @@ function VariantRow({ apiBase, variant, items, onChanged }) {
             {copied ? 'Copied!' : 'Copy link'}
           </button>
           {variant.active && (
-            <button type="button" className="sk-ghost" disabled={busy} onClick={() => patch({ action: 'deactivate' })}>
+            <button
+              type="button"
+              className="sk-ghost"
+              disabled={busy}
+              onClick={() => patch({ action: 'deactivate' })}
+            >
               Deactivate
             </button>
           )}
@@ -357,7 +377,12 @@ function VariantRow({ apiBase, variant, items, onChanged }) {
       {editing === 'duration' && (
         <div className="sk-edit-panel">
           <DurationPicker value={durationDays} onChange={setDurationDays} />
-          <button type="button" className="sk-primary-sm" disabled={busy} onClick={() => patch({ action: 'setDuration', durationDays })}>
+          <button
+            type="button"
+            className="sk-primary-sm"
+            disabled={busy}
+            onClick={() => patch({ action: 'setDuration', durationDays })}
+          >
             {busy ? 'Saving…' : 'Save expiry'}
           </button>
         </div>
@@ -368,7 +393,11 @@ function VariantRow({ apiBase, variant, items, onChanged }) {
           <ItemToggles
             items={items}
             orderedIds={orderedIds}
-            onToggle={(id) => setOrderedIds((prev) => (prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]))}
+            onToggle={(id) =>
+              setOrderedIds((prev) =>
+                prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id],
+              )
+            }
             onReorder={reorder}
           />
           <button
@@ -384,7 +413,9 @@ function VariantRow({ apiBase, variant, items, onChanged }) {
 
       {error && <div className="sk-result-err">{error}</div>}
       {orphans.length > 0 && (
-        <div className="sk-result-warn">⚠ These ids don’t match any item and won’t appear: {orphans.join(', ')}</div>
+        <div className="sk-result-warn">
+          ⚠ These ids don’t match any item and won’t appear: {orphans.join(', ')}
+        </div>
       )}
     </li>
   )
