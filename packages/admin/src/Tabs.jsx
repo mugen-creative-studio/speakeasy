@@ -4,7 +4,10 @@ import { useState, useRef, useEffect } from 'react'
 // (its styles live in admin.css, scoped under .sk-shell). `options` is [{ label, value }].
 export default function Tabs({ options = [], defaultSelection, onChange }) {
   const [activeIndex, setActiveIndex] = useState(
-    Math.max(0, options.findIndex((o) => o.value === defaultSelection)),
+    Math.max(
+      0,
+      options.findIndex((o) => o.value === defaultSelection),
+    ),
   )
   const [hoveredIndex, setHoveredIndex] = useState(null)
   const containerRef = useRef(null)
@@ -34,8 +37,8 @@ export default function Tabs({ options = [], defaultSelection, onChange }) {
 
   const pillLeft = (measurements[activeIndex]?.left ?? 0) - 1
   const pillWidth = measurements[activeIndex]?.width ?? 0
-  const hoverLeft = (hoveredIndex !== null ? measurements[hoveredIndex]?.left ?? 0 : 0) - 1
-  const hoverWidth = hoveredIndex !== null ? measurements[hoveredIndex]?.width ?? 0 : 0
+  const hoverLeft = (hoveredIndex !== null ? (measurements[hoveredIndex]?.left ?? 0) : 0) - 1
+  const hoverWidth = hoveredIndex !== null ? (measurements[hoveredIndex]?.width ?? 0) : 0
   const showHover = hoveredIndex !== null && hoveredIndex !== activeIndex
 
   const clipPath =

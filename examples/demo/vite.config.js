@@ -16,7 +16,9 @@ function speakeasyLookup({ config }) {
       const ctx = createContext(config, { root: server.config.root })
       // Throttle the one brute-force surface. `lookupRateLimit: false` disables it.
       const limiter =
-        config.lookupRateLimit === false ? null : createRateLimiter(config.lookupRateLimit || undefined)
+        config.lookupRateLimit === false
+          ? null
+          : createRateLimiter(config.lookupRateLimit || undefined)
       server.middlewares.use(async (req, res, next) => {
         const url = req.url || ''
         if (!url.startsWith(config.lookupPath)) return next()

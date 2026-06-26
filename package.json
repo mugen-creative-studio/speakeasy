@@ -4,9 +4,14 @@
   "private": true,
   "description": "Confidential content variants behind unguessable slugs - stack-agnostic core, server adapters, CLI, and React admin.",
   "type": "module",
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "author": "Mugen Creative Studio",
-  "repository": { "type": "git", "url": "git+https://github.com/mugen-creative-studio/speakeasy.git" },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mugen-creative-studio/speakeasy.git"
+  },
   "homepage": "https://github.com/mugen-creative-studio/speakeasy#readme",
   "bugs": "https://github.com/mugen-creative-studio/speakeasy/issues",
   "workspaces": [
@@ -17,7 +22,12 @@
     "examples/demo"
   ],
   "scripts": {
-    "test": "npm run test --workspaces --if-present"
+    "test": "npm run test --workspaces --if-present",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "prettier": "^3.8.4"
+  }
 }

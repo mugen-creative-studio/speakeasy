@@ -22,7 +22,11 @@ import { isServable } from '@speakeasy/core'
 // dropped at serve time - but a clean source keeps assertions sharp.)
 const content = {
   async items() {
-    return ['learning-cloud', 'x', 'y', 'a', 'b'].map((id) => ({ id, title: id, visibility: 'public' }))
+    return ['learning-cloud', 'x', 'y', 'a', 'b'].map((id) => ({
+      id,
+      title: id,
+      visibility: 'public',
+    }))
   },
 }
 
@@ -82,7 +86,11 @@ after(() => {
 })
 
 test('create: writes manifest, pushes, verifies live before reporting', async () => {
-  const result = await handleCreate(ctx, { label: 'Acme - Smoke', items: ['learning-cloud'], durationDays: 30 })
+  const result = await handleCreate(ctx, {
+    label: 'Acme - Smoke',
+    items: ['learning-cloud'],
+    durationDays: 30,
+  })
   assert.equal(result.verified, true, 'should verify the slug is live')
   assert.equal(result.state, 'live')
   assert.deepEqual(result.items, ['learning-cloud'])

@@ -47,7 +47,8 @@ function parseDuration(raw) {
   if (raw === undefined) return undefined
   if (raw === 'none' || raw === 'null' || raw === false) return null
   const n = Number(raw)
-  if (Number.isNaN(n)) throw new Error(`--duration must be a number of days or "none", got "${raw}"`)
+  if (Number.isNaN(n))
+    throw new Error(`--duration must be a number of days or "none", got "${raw}"`)
   return n
 }
 
@@ -81,14 +82,20 @@ function renderPretty(data) {
   // so this must come before the content-list branch below).
   if (data?.slug && data?.url) {
     const lines = [`${data.verified ? '✓' : '⚠'} ${data.state}  ${data.url}`]
-    if (data.orphans?.length) lines.push(`  orphaned ids (won't appear): ${data.orphans.join(', ')}`)
+    if (data.orphans?.length)
+      lines.push(`  orphaned ids (won't appear): ${data.orphans.join(', ')}`)
     if (!data.verified) lines.push('  could not verify the change went live before the timeout')
     return lines.join('\n')
   }
   // The content list: `items` are objects { id, title, visibility, meta }.
   if (Array.isArray(data?.items)) {
     if (!data.items.length) return '(no items)'
-    return data.items.map((i) => `${i.visibility === 'private' ? '🔒' : '  '} ${i.id}  ${i.title}${i.meta ? ` · ${i.meta}` : ''}`).join('\n')
+    return data.items
+      .map(
+        (i) =>
+          `${i.visibility === 'private' ? '🔒' : '  '} ${i.id}  ${i.title}${i.meta ? ` · ${i.meta}` : ''}`,
+      )
+      .join('\n')
   }
   return JSON.stringify(data, null, 2)
 }
@@ -106,7 +113,10 @@ async function main() {
   }
 
   const root = flags.root ? String(flags.root) : process.cwd()
-  const config = await loadConfig({ root, configPath: flags.config ? String(flags.config) : undefined })
+  const config = await loadConfig({
+    root,
+    configPath: flags.config ? String(flags.config) : undefined,
+  })
   const ctx = createContext(config, { root })
 
   switch (command) {
@@ -136,12 +146,21 @@ async function main() {
 
     case 'set-duration': {
       const slug = requireSlug(args)
-      return out(await handlePatch(ctx, slug, { action: 'setDuration', durationDays: parseDuration(flags.duration) }), pretty)
+      return out(
+        await handlePatch(ctx, slug, {
+          action: 'setDuration',
+          durationDays: parseDuration(flags.duration),
+        }),
+        pretty,
+      )
     }
 
     case 'set-items': {
       const slug = requireSlug(args)
-      return out(await handlePatch(ctx, slug, { action: 'setItems', items: parseItems(flags.items) }), pretty)
+      return out(
+        await handlePatch(ctx, slug, { action: 'setItems', items: parseItems(flags.items) }),
+        pretty,
+      )
     }
 
     case 'lookup': {

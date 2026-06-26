@@ -43,7 +43,11 @@ export function createMemoryStore() {
   }
 }
 
-export function createRateLimiter({ limit = 60, windowMs = 60_000, store = createMemoryStore() } = {}) {
+export function createRateLimiter({
+  limit = 60,
+  windowMs = 60_000,
+  store = createMemoryStore(),
+} = {}) {
   return {
     // Record one hit for `key` and report whether it's within the limit.
     // Returns { allowed, remaining, retryAfterMs }. `now` is injectable for tests.

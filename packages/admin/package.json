@@ -3,18 +3,29 @@
   "version": "0.1.0",
   "description": "React admin dashboard for speakeasy confidential content variants. Self-contained styling (no host design system required); talks to @speakeasy/server's admin API.",
   "type": "module",
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "author": "Mugen Creative Studio",
-  "repository": { "type": "git", "url": "git+https://github.com/mugen-creative-studio/speakeasy.git", "directory": "packages/admin" },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mugen-creative-studio/speakeasy.git",
+    "directory": "packages/admin"
+  },
   "homepage": "https://github.com/mugen-creative-studio/speakeasy#readme",
   "bugs": "https://github.com/mugen-creative-studio/speakeasy/issues",
   "main": "src/index.js",
   "exports": {
-    ".": { "types": "./src/index.d.ts", "default": "./src/index.js" },
+    ".": {
+      "types": "./src/index.d.ts",
+      "default": "./src/index.js"
+    },
     "./admin.css": "./src/admin.css"
   },
   "types": "./src/index.d.ts",
-  "files": ["src"],
+  "files": [
+    "src"
+  ],
   "peerDependencies": {
     "react": ">=18",
     "react-dom": ">=18"
