@@ -4,7 +4,7 @@
 // or for local development against a manifest that some other process serves.
 // Pair it with noopVerifier - there is no separate deploy to wait for.
 
-import { readFileSync, writeFileSync } from 'node:fs'
+import { readFileSync, writeFileSync, renameSync } from 'node:fs'
 import path from 'node:path'
 
 export function createFsStorage({ root = process.cwd(), manifestPath = 'variants.json' } = {}) {
@@ -20,7 +20,13 @@ export function createFsStorage({ root = process.cwd(), manifestPath = 'variants
       }
     },
     async persist(manifest) {
-      writeFileSync(abs, JSON.stringify(manifest, null, 2) + '\n')
+      // Atomic write: a crash mid-write must not leave a truncated, unparseable
+      // manifest (which read() would then swallow as {}, silently dropping every
+      // live slug). Write to a temp file, then rename, which is atomic on the
+      // same filesystem.
+      const tmp = abs + '.tmp'
+      writeFileSync(tmp, JSON.stringify(manifest, null, 2) + '\n')
+      renameSync(tmp, abs)
     },
   }
 }
