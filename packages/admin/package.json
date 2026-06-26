@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "React admin dashboard for speakeasy confidential content variants. Self-contained styling (no host design system required); talks to @speakeasy/server's admin API.",
   "type": "module",
+  "engines": { "node": ">=20" },
   "main": "src/index.js",
   "exports": {
     ".": "./src/index.js",

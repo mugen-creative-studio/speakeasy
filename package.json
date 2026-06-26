@@ -4,6 +4,7 @@
   "private": true,
   "description": "Confidential content variants behind unguessable slugs - stack-agnostic core, server adapters, CLI, and React admin.",
   "type": "module",
+  "engines": { "node": ">=20" },
   "workspaces": [
     "packages/core",
     "packages/server",

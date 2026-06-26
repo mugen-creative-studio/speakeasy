@@ -84,7 +84,11 @@ To keep the guarantees above actually true on your deployment:
 - **Rate-limit the lookup endpoint.** Use the built-in `createRateLimiter` or
   your platform's edge rate limiting / WAF. Note the in-memory limiter is
   best-effort on serverless (per-instance); back it with a shared store for a
-  hard cap. See INSTALL.md, section 6.
+  hard cap. See INSTALL.md, section 6. The built-in limiter keys on
+  `x-forwarded-for`, which is **spoofable** unless a trusted proxy overwrites it
+  (Vercel and Cloudflare do). If clients can reach the function directly, key on
+  a header your platform controls (e.g. Cloudflare's `cf-connecting-ip`) or the
+  socket address instead.
 - **Keep host bypass tokens in environment variables**, never committed. The
   repo gitignores `.env`, `.env.*`, and `.bypass-token`.
 

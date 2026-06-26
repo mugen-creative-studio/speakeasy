@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "Server-side request handlers and pluggable adapters (storage, deploy-verifier, content source) for speakeasy confidential content variants. Mountable as connect/Express middleware or a Vite dev plugin.",
   "type": "module",
+  "engines": { "node": ">=20" },
   "main": "src/index.js",
   "exports": {
     ".": "./src/index.js",
