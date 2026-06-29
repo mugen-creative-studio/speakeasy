@@ -11,9 +11,15 @@ const MS_PER_DAY = 24 * 60 * 60 * 1000
 
 // Build a fresh manifest entry. `now` is a ms timestamp (injected for testing).
 // `durationDays: null` produces a no-expiry entry.
-export function buildEntry({ label = '', items = [], durationDays = DEFAULT_DURATION_DAYS, now = Date.now() }) {
+export function buildEntry({
+  label = '',
+  items = [],
+  durationDays = DEFAULT_DURATION_DAYS,
+  now = Date.now(),
+}) {
   const createdAt = new Date(now).toISOString()
-  const expiresAt = durationDays == null ? null : new Date(now + durationDays * MS_PER_DAY).toISOString()
+  const expiresAt =
+    durationDays == null ? null : new Date(now + durationDays * MS_PER_DAY).toISOString()
   return { label, items: [...items], createdAt, expiresAt, active: true }
 }
 
@@ -55,6 +61,10 @@ export function computeStatus(entry, now = Date.now()) {
   if (entry?.active !== true) state = 'deactivated'
   else if (expired) state = 'expired'
   else state = 'live'
-  const daysLeft = noExpiry ? Infinity : Number.isNaN(expiresAt) ? 0 : Math.max(0, Math.floor((expiresAt - now) / MS_PER_DAY))
+  const daysLeft = noExpiry
+    ? Infinity
+    : Number.isNaN(expiresAt)
+      ? 0
+      : Math.max(0, Math.floor((expiresAt - now) / MS_PER_DAY))
   return { state, daysLeft }
 }

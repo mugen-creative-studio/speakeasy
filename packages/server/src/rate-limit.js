@@ -43,7 +43,11 @@ export function createMemoryStore() {
   }
 }
 
-export function createRateLimiter({ limit = 60, windowMs = 60_000, store = createMemoryStore() } = {}) {
+export function createRateLimiter({
+  limit = 60,
+  windowMs = 60_000,
+  store = createMemoryStore(),
+} = {}) {
   return {
     // Record one hit for `key` and report whether it's within the limit.
     // Returns { allowed, remaining, retryAfterMs }. `now` is injectable for tests.
@@ -65,6 +69,14 @@ export function createRateLimiter({ limit = 60, windowMs = 60_000, store = creat
 // Best-effort client identifier from a Node request. Behind a proxy/CDN (Vercel)
 // the real client is the first entry of x-forwarded-for; fall back to the socket
 // address for a direct (local dev) connection.
+//
+// SECURITY: x-forwarded-for is set by the caller and is trivially SPOOFABLE
+// unless a trusted proxy in front of you overwrites it (Vercel and Cloudflare
+// do). If clients can reach the function directly, an attacker can forge this
+// header to rotate "IPs" and slip past the rate limit. On Cloudflare prefer the
+// platform's `cf-connecting-ip`; on a raw Node host with no trusted proxy, key
+// on the socket address instead. Treat this throttle as best-effort shedding,
+// never as a hard guarantee (see the module header).
 export function clientKey(req) {
   const xff = req?.headers?.['x-forwarded-for']
   if (xff) return String(xff).split(',')[0].trim()

@@ -1,6 +1,12 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { buildEntry, isServable, partitionItemIds, computeStatus, generateSlug } from '../src/index.js'
+import {
+  buildEntry,
+  isServable,
+  partitionItemIds,
+  computeStatus,
+  generateSlug,
+} from '../src/index.js'
 
 const NOW = Date.parse('2026-01-01T00:00:00.000Z')
 const DAY = 24 * 60 * 60 * 1000
@@ -40,8 +46,14 @@ test('partitionItemIds: preserves order, separates orphans', () => {
 })
 
 test('computeStatus: live / expired / deactivated + daysLeft', () => {
-  assert.deepEqual(computeStatus(buildEntry({ durationDays: 10, now: NOW }), NOW), { state: 'live', daysLeft: 10 })
-  assert.equal(computeStatus(buildEntry({ durationDays: 1, now: NOW }), NOW + 2 * DAY).state, 'expired')
+  assert.deepEqual(computeStatus(buildEntry({ durationDays: 10, now: NOW }), NOW), {
+    state: 'live',
+    daysLeft: 10,
+  })
+  assert.equal(
+    computeStatus(buildEntry({ durationDays: 1, now: NOW }), NOW + 2 * DAY).state,
+    'expired',
+  )
   assert.equal(computeStatus({ active: false, expiresAt: null }, NOW).state, 'deactivated')
   assert.equal(computeStatus(buildEntry({ durationDays: null, now: NOW }), NOW).daysLeft, Infinity)
 })
