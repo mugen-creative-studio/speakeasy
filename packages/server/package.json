@@ -30,7 +30,7 @@
     "src"
   ],
   "scripts": {
-    "test": "node --test \"test/**/*.test.js\""
+    "test": "node --test test/*.test.js"
   },
   "dependencies": {
     "@speakeasy/core": "0.1.0"
