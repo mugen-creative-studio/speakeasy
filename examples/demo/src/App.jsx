@@ -26,7 +26,7 @@ export default function App() {
       <Suspense fallback={null}>
         <AdminRoute
           title="Portfolio variants"
-          subtitle="Local dashboard · mint a secret link, choose what it reveals, revoke when done"
+          subtitle="Mint a private link, choose what it reveals, and revoke it when the conversation's over."
         />
       </Suspense>
     )

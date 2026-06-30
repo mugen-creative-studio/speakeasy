@@ -1,10 +1,33 @@
+/* Atelier — the public portfolio. Dark Geist (Vercel) surface: Geist Sans for
+ * text, Geist Mono for IDs/meta, a near-black grayscale palette with one
+ * restrained blue, crisp 1px borders. The admin dashboard is the light
+ * counterpart of this same system. */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap');
+
 :root {
-  --bg: #0e0e10;
-  --panel: #16161a;
-  --ink: #f4f4f5;
-  --muted: #9a9aa3;
-  --line: #26262c;
-  --accent: #c8b6ff;
+  /* color — Geist grayscale (dark) */
+  --bg: #000000;
+  --bg-subtle: #0a0a0a;
+  --border: #2a2a2a; /* gray-400 dark */
+  --border-strong: #454545;
+  --ink: #ededed; /* gray-1000 dark */
+  --muted: #a1a1a1; /* gray-900 dark */
+  --faint: #707070;
+  --blue: #0070f3;
+
+  /* type */
+  --font-sans: 'DM Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'DM Sans', system-ui, -apple-system, sans-serif;
+
+  --t-eyebrow: 0.875rem; /* 14px */
+  --t-meta: 0.875rem; /* 14px */
+  --t-body: 0.9375rem; /* 15px */
+  --t-lead: 1.0625rem; /* 17px */
+  --t-h3: 1.25rem; /* 20px */
+  --t-display: 2.75rem; /* 44px */
+
+  --r: 6px;
 }
 
 * {
@@ -21,124 +44,138 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--ink);
-  font-family:
-    ui-sans-serif,
-    system-ui,
-    -apple-system,
-    'Segoe UI',
-    Roboto,
-    sans-serif;
-  line-height: 1.55;
+  font-family: var(--font-sans);
+  font-size: var(--t-body);
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 .site {
   max-width: 720px;
   margin: 0 auto;
-  padding: 72px 24px 96px;
+  padding: 88px 24px 112px;
 }
 
+/* ── masthead ──────────────────────────────────────────────────────────── */
 .masthead {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  padding-bottom: 36px;
-  margin-bottom: 36px;
-  border-bottom: 1px solid var(--line);
+  gap: 12px;
+  padding-bottom: 40px;
+  margin-bottom: 48px;
+  border-bottom: 1px solid var(--border);
 }
 
 .wordmark {
-  font-size: 26px;
-  font-weight: 650;
-  letter-spacing: -0.02em;
+  font-family: var(--font-sans);
+  font-size: var(--t-display);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.04em;
 }
 
 .tagline {
+  font-family: var(--font-mono);
+  font-size: var(--t-eyebrow);
+  font-weight: 400;
+  letter-spacing: 0.04em;
   color: var(--muted);
-  font-size: 15px;
 }
 
+/* ── work list ─────────────────────────────────────────────────────────── */
 .work {
   list-style: none;
   margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 28px;
 }
 
 .case {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 24px 26px;
+  padding: 32px 0;
+  border-top: 1px solid var(--border);
+}
+.case:first-child {
+  border-top: none;
+  padding-top: 0;
 }
 
 .case-head {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 10px;
+  gap: 24px;
+  margin-bottom: 12px;
 }
 
 .case-title {
   margin: 0;
-  font-size: 19px;
+  font-family: var(--font-sans);
+  font-size: var(--t-h3);
   font-weight: 600;
-  letter-spacing: -0.01em;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
 }
 
 .case-meta {
-  color: var(--accent);
-  font-size: 13px;
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  color: var(--faint);
   white-space: nowrap;
 }
 
 .case-summary {
-  margin: 0 0 8px;
+  margin: 0 0 10px;
+  font-size: var(--t-lead);
+  line-height: 1.5;
   color: var(--ink);
-  font-size: 15px;
 }
 
 .case-body {
   margin: 0;
+  font-size: var(--t-body);
   color: var(--muted);
-  font-size: 14.5px;
+  max-width: 62ch;
 }
 
+/* ── footer ────────────────────────────────────────────────────────────── */
 .site-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 56px;
-  padding-top: 20px;
-  border-top: 1px solid var(--line);
-  color: var(--muted);
-  font-size: 13px;
+  margin-top: 64px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  color: var(--faint);
 }
 
 .demo-link {
-  color: var(--muted);
+  color: var(--faint);
   text-decoration: none;
+  transition: color 120ms ease;
 }
 .demo-link:hover {
-  color: var(--accent);
+  color: var(--blue);
 }
 
-/* The 404 - plain and final. Identical for any dead slug or junk path. */
+/* ── the indistinguishable 404 — plain and final ──────────────────────────── */
 .notfound {
   text-align: left;
 }
 .notfound-msg {
+  font-size: var(--t-lead);
   color: var(--muted);
-  font-size: 16px;
-  margin: 48px 0 16px;
+  margin: 56px 0 18px;
 }
 .notfound-home {
-  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  color: var(--blue);
   text-decoration: none;
-  font-size: 14px;
 }
 .notfound-home:hover {
   text-decoration: underline;

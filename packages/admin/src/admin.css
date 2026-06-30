@@ -1,60 +1,66 @@
-/* Self-contained styling for @speakeasy/admin. All design tokens are defined on
- * .sk-shell, so the dashboard carries its own look and needs nothing from the
- * host's CSS. To re-theme, override any of these custom properties on .sk-shell
- * (e.g. .sk-shell { --color-attention: #0a7; --font-family: 'Inter'; }). */
+/* Self-contained styling for @speakeasy/admin, in the Geist (Vercel) idiom:
+ * Geist Sans for UI, Geist Mono for IDs/slugs/metrics, a grayscale-driven
+ * palette with black as the primary action, crisp 1px borders, 6px radii.
+ * All tokens live on .sk-shell so the dashboard carries its own look.
+ * This is the LIGHT surface; the public site is the dark counterpart. */
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap');
 
 .sk-shell {
-  /* color */
-  --color-text: #2b4159;
-  --color-fg-secondary: #4b5563;
-  --color-bg: #ffffff;
-  --color-bg-component: #f7f8f9;
-  --color-border: #e5e7eb;
-  --color-attention: #007aff;
-  --color-accent-red: #ff0f3b;
-  --color-white: #ffffff;
-  --color-gray-50: #f7f8f9;
+  /* type — all DM Sans; the "mono" role keeps its name but uses DM Sans too */
+  --font-sans: 'DM Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'DM Sans', system-ui, -apple-system, sans-serif;
+
+  --t-label: 0.875rem; /* 14px */
+  --t-meta: 0.875rem; /* 14px */
+  --t-body: 0.875rem; /* 14px — Geist UI base */
+  --t-lead: 1rem; /* 16px */
+  --t-h3: 1.25rem; /* 20px */
+  --t-h1: 1.75rem; /* 28px */
+
+  /* color — Geist grayscale (light) */
+  --bg: #ffffff;
+  --bg-subtle: #fafafa;
+  --gray-200: #f2f2f2;
+  --gray-300: #ebebeb;
+  --border: #eaeaea; /* gray-400, the default border */
+  --border-strong: #999999;
+  --muted: #666666; /* gray-900, secondary text */
+  --faint: #8f8f8f;
+  --ink: #000000; /* gray-1000, primary text */
+
+  /* semantic — used sparingly */
+  --blue: #0070f3;
+  --green: #45a557;
+  --red: #e5484d;
+
+  /* radius — 6px everywhere; full-round reserved for the switch */
+  --r: 6px;
+  --r-pill: 9999px;
+  --radius-round: 6px; /* referenced by the Tabs clip-path */
 
   /* spacing */
-  --space-4: 4px;
-  --space-8: 8px;
-  --space-16: 16px;
-  --space-32: 32px;
-  --space-40: 40px;
-  --space-80: 80px;
+  --s-4: 4px;
+  --s-8: 8px;
+  --s-12: 12px;
+  --s-16: 16px;
+  --s-20: 20px;
+  --s-24: 24px;
+  --s-32: 32px;
+  --s-48: 48px;
+  --s-64: 64px;
 
-  /* type */
-  --font-family: 'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-size-h2: 42px;
-  --line-height-h2-reg: 52px;
-  --font-weight-h2-bold: 600;
-  --font-size-p: 16px;
-  --line-height-p: 32px;
-  --font-weight-p-reg: 400;
-  --font-weight-p-bold: 600;
-  --font-size-sm: 12px;
-  --font-weight-sm: 500;
-  --font-size-button: 20px;
-  --font-size-button-sm: 16px;
-  --line-height-button-sm: 16px;
-  --font-weight-button: 500;
-
-  /* radius */
-  --radius-card: 8px;
-  --radius-round: 9999px;
-
-  /* Fill the whole viewport with the dashboard's own surface and center the
-     content - so the original light styling renders correctly on any host
-     (including a dark one) instead of floating as a column on the host bg. */
   width: 100%;
   min-height: 100vh;
   margin: 0;
-  padding: var(--space-40) max(var(--space-16), calc((100% - 720px) / 2)) var(--space-80);
-  font-family: var(--font-family);
-  color: var(--color-text);
-  background: var(--color-bg);
+  padding: var(--s-64) max(var(--s-16), calc((100% - 680px) / 2)) var(--s-64);
+  font-family: var(--font-sans);
+  font-size: var(--t-body);
+  line-height: 1.5;
+  color: var(--ink);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 .sk-shell *,
@@ -63,358 +69,443 @@
   box-sizing: border-box;
 }
 
+/* ── header ────────────────────────────────────────────────────────────── */
 .sk-header {
   display: flex;
   flex-direction: column;
-  gap: var(--space-16);
-  margin-bottom: var(--space-32);
+  gap: var(--s-8);
+  margin-bottom: var(--s-32);
+  padding-bottom: var(--s-24);
+  border-bottom: 1px solid var(--border);
 }
 
 .sk-title {
-  font-size: var(--font-size-h2);
-  font-weight: var(--font-weight-h2-bold);
-  line-height: var(--line-height-h2-reg);
-  letter-spacing: -0.015em;
   margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--t-h1);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
 }
 
 .sk-subtitle {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-sm);
-  letter-spacing: 0.02em;
-  color: var(--color-fg-secondary);
   margin: 0;
+  max-width: 60ch;
+  font-size: var(--t-meta);
+  color: var(--muted);
 }
 
+.sk-header .sk-tabs {
+  margin-top: var(--s-12);
+}
+
+/* ── panel + fields ────────────────────────────────────────────────────── */
 .sk-panel {
   display: flex;
   flex-direction: column;
-  gap: var(--space-32);
+  gap: var(--s-32);
 }
 
 .sk-field {
   display: flex;
   flex-direction: column;
-  gap: var(--space-8);
+  gap: var(--s-12);
 }
 
+/* section header — sentence-case, dark, sized up so it reads as a heading
+   above its group (no uppercase/tracking decoration). */
 .sk-field-label {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-sm);
-  letter-spacing: 0.02em;
-  color: var(--color-fg-secondary);
+  font-size: var(--t-h3); /* 20px */
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ink);
 }
 
 .sk-input {
-  font-family: var(--font-family);
-  font-size: var(--font-size-p);
-  line-height: var(--line-height-p);
-  color: var(--color-text);
-  background: var(--color-bg);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-card);
-  padding: var(--space-8) var(--space-16);
+  font-family: var(--font-sans);
+  font-size: var(--t-body);
+  line-height: 1.5;
+  color: var(--ink);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 8px var(--s-12);
+  transition:
+    border-color 120ms ease,
+    box-shadow 120ms ease;
+}
+.sk-input::placeholder {
+  color: var(--faint);
 }
 .sk-input:focus-visible {
-  outline: 2px solid var(--color-attention);
-  outline-offset: 1px;
+  outline: none;
+  border-color: var(--ink);
+  box-shadow: 0 0 0 1px var(--ink);
 }
 
-/* duration pills */
+/* duration — mono chips */
 .sk-pill-row {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-8);
+  gap: var(--s-8);
 }
 .sk-pill {
-  font-family: var(--font-family);
-  font-size: var(--font-size-button-sm);
-  font-weight: var(--font-weight-button);
-  color: var(--color-text);
-  background: var(--color-bg-component);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-round);
-  padding: var(--space-8) var(--space-16);
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  font-weight: 400;
+  color: var(--muted);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 6px 10px;
   cursor: pointer;
   transition:
-    background 150ms ease,
-    color 150ms ease;
+    background 120ms ease,
+    color 120ms ease,
+    border-color 120ms ease;
 }
 .sk-pill:hover {
-  background: var(--color-border);
+  border-color: var(--border-strong);
+  color: var(--ink);
 }
 .sk-pill-active,
 .sk-pill-active:hover {
-  background: var(--color-text);
-  color: var(--color-bg-component);
-  border-color: var(--color-text);
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink);
 }
 
-/* item toggles */
+/* ── item toggles ──────────────────────────────────────────────────────── */
 .sk-toggle-list {
   list-style: none;
   margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-card);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
   overflow: hidden;
 }
 .sk-toggle-row {
   display: flex;
-  align-items: center;
-  gap: var(--space-16);
-  padding: var(--space-16);
-  background: var(--color-bg);
+  /* top-align so the switch + handle sit on the title line, not centered
+     against the whole two-line block */
+  align-items: flex-start;
+  gap: var(--s-16);
+  padding: var(--s-16);
+  transition: background 120ms ease;
+}
+.sk-toggle-row:hover {
+  background: var(--bg-subtle);
 }
 .sk-toggle-row + .sk-toggle-row {
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid var(--border);
 }
+.sk-toggle-row-dragover {
+  box-shadow: inset 0 2px 0 0 var(--ink);
+}
+
 .sk-switch {
   flex: none;
-  width: 40px;
-  height: 24px;
-  border-radius: var(--radius-round);
+  width: 36px;
+  height: 20px;
+  border-radius: var(--r-pill);
   border: none;
-  background: var(--color-border);
+  background: var(--gray-300);
   padding: 2px;
   cursor: pointer;
   transition: background 150ms ease;
 }
 .sk-switch-on {
-  background: var(--color-attention);
+  background: var(--ink);
 }
 .sk-switch-knob {
   display: block;
-  width: 20px;
-  height: 20px;
-  border-radius: var(--radius-round);
-  background: var(--color-white);
+  width: 16px;
+  height: 16px;
+  border-radius: var(--r-pill);
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
   transform: translateX(0);
   transition: transform 150ms ease;
 }
 .sk-switch-on .sk-switch-knob {
   transform: translateX(16px);
 }
+
 .sk-drag-handle {
   flex: none;
   width: 10px;
   height: 16px;
+  margin-top: 2px; /* center the 16px grip on the 20px title line */
   cursor: grab;
-  background: radial-gradient(circle, var(--color-fg-secondary) 1.5px, transparent 1.5px) 0 0 / 5px
-    5px;
-  opacity: 0.3;
+  background: radial-gradient(circle, var(--faint) 1.5px, transparent 1.5px) 0 0 / 5px 5px;
+  opacity: 0.7;
   transition: opacity 150ms ease;
 }
 .sk-toggle-row:hover .sk-drag-handle {
-  opacity: 0.6;
+  opacity: 1;
 }
-.sk-toggle-row-dragover {
-  box-shadow: 0 -2px 0 0 var(--color-attention);
+.sk-drag-handle:active {
+  cursor: grabbing;
 }
+.sk-drag-handle-disabled,
+.sk-toggle-row:hover .sk-drag-handle-disabled {
+  opacity: 0.2;
+  cursor: default;
+}
+
 .sk-toggle-text {
   display: flex;
   flex-direction: column;
+  gap: 3px;
 }
 .sk-toggle-title {
-  font-size: var(--font-size-p);
-  font-weight: var(--font-weight-p-bold);
+  /* sized + line-heighted to match the 20px switch, so the top line and the
+     toggle align and read as the same scale */
+  font-size: var(--t-lead); /* 16px */
+  line-height: 20px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 .sk-toggle-meta {
-  font-size: var(--font-size-sm);
-  letter-spacing: 0.02em;
-  color: var(--color-fg-secondary);
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  line-height: 1.4;
+  color: var(--muted);
 }
 
-/* buttons */
+/* ── buttons ───────────────────────────────────────────────────────────── */
 .sk-primary,
 .sk-primary-sm {
-  font-family: var(--font-family);
-  font-weight: var(--font-weight-button);
-  color: var(--color-bg);
-  background: var(--color-text);
-  border: none;
-  border-radius: var(--radius-round);
+  font-family: var(--font-sans);
+  font-weight: 500;
+  color: #fff;
+  background: var(--ink);
+  border: 1px solid var(--ink);
+  border-radius: var(--r);
   cursor: pointer;
   align-self: flex-start;
-  transition: opacity 150ms ease;
+  transition:
+    background 120ms ease,
+    opacity 120ms ease;
+}
+.sk-primary:hover:not(:disabled),
+.sk-primary-sm:hover:not(:disabled) {
+  background: #383838;
 }
 .sk-primary {
-  font-size: var(--font-size-button);
-  padding: var(--space-16) var(--space-32);
+  font-size: var(--t-body);
+  padding: 9px var(--s-16);
 }
 .sk-primary-sm {
-  font-size: var(--font-size-button-sm);
-  padding: var(--space-8) var(--space-16);
+  font-size: var(--t-meta);
+  padding: 6px var(--s-12);
 }
 .sk-primary:disabled,
 .sk-primary-sm:disabled {
-  opacity: 0.45;
+  opacity: 0.4;
   cursor: not-allowed;
 }
 .sk-ghost {
-  font-family: var(--font-family);
-  font-size: var(--font-size-button-sm);
-  color: var(--color-text);
-  background: transparent;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-round);
-  padding: var(--space-4) var(--space-16);
+  font-family: var(--font-sans);
+  font-size: var(--t-meta);
+  font-weight: 500;
+  color: var(--ink);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 6px var(--s-12);
   cursor: pointer;
+  transition:
+    border-color 120ms ease,
+    background 120ms ease;
 }
 .sk-ghost:hover {
-  border-color: var(--color-text);
+  border-color: var(--border-strong);
+  background: var(--bg-subtle);
 }
 .sk-ghost:disabled {
-  opacity: 0.45;
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
-/* results */
+/* ── results ───────────────────────────────────────────────────────────── */
 .sk-result-ok,
 .sk-result-err,
 .sk-result-warn {
   display: flex;
   flex-direction: column;
-  gap: var(--space-8);
-  padding: var(--space-16);
-  border-radius: var(--radius-card);
-  border: 1px solid var(--color-border);
-  background: var(--color-bg-component);
+  gap: var(--s-8);
+  padding: var(--s-16);
+  border-radius: var(--r);
+  border: 1px solid var(--border);
+  background: var(--bg-subtle);
 }
 .sk-result-label {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-p-bold);
-  letter-spacing: 0.02em;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  font-weight: 500;
+  color: var(--green);
+}
+.sk-result-label::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: var(--r-pill);
+  background: var(--green);
 }
 .sk-result-err {
-  color: var(--color-accent-red);
-  border-color: var(--color-accent-red);
+  color: var(--red);
+  border-color: color-mix(in srgb, var(--red) 35%, var(--border));
 }
 .sk-result-warn {
-  margin-top: var(--space-8);
-  color: var(--color-accent-red);
-  border-color: var(--color-accent-red);
-  font-size: var(--font-size-sm);
-}
-.sk-copy {
-  font-family: var(--font-family);
-  font-size: var(--font-size-p);
-  font-weight: var(--font-weight-p-bold);
-  text-align: left;
-  color: var(--color-text);
-  background: var(--color-bg);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-card);
-  padding: var(--space-8) var(--space-16);
-  cursor: pointer;
-  word-break: break-all;
-}
-.sk-result-meta {
-  font-size: var(--font-size-sm);
-  letter-spacing: 0.02em;
-  color: var(--color-fg-secondary);
+  margin-top: var(--s-8);
+  color: var(--red);
+  border-color: color-mix(in srgb, var(--red) 35%, var(--border));
+  font-size: var(--t-meta);
 }
 
-/* manage list */
+/* the minted link, rendered as a Geist-Mono serial */
+.sk-copy {
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  text-align: left;
+  color: var(--ink);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 8px var(--s-12);
+  cursor: pointer;
+  word-break: break-all;
+  transition: border-color 120ms ease;
+}
+.sk-copy:hover {
+  border-color: var(--border-strong);
+}
+.sk-result-meta {
+  font-size: var(--t-meta);
+  color: var(--muted);
+}
+
+/* ── manage list ───────────────────────────────────────────────────────── */
 .sk-variant-list {
   list-style: none;
   margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--space-16);
+  gap: var(--s-12);
 }
 .sk-variant-row {
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-card);
-  padding: var(--space-16);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: var(--s-16);
   display: flex;
   flex-direction: column;
-  gap: var(--space-16);
+  gap: var(--s-16);
 }
 .sk-variant-head {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: var(--space-16);
+  gap: var(--s-16);
   flex-wrap: wrap;
 }
 .sk-variant-main {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: 6px;
   min-width: 0;
 }
 .sk-variant-label {
-  font-size: var(--font-size-p);
-  font-weight: var(--font-weight-p-bold);
+  font-size: var(--t-lead);
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 .sk-variant-url {
-  font-size: var(--font-size-sm);
-  letter-spacing: 0.02em;
-  color: var(--color-fg-secondary);
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  color: var(--muted);
   word-break: break-all;
 }
 .sk-variant-actions {
   display: flex;
-  gap: var(--space-8);
+  gap: var(--s-8);
   flex-wrap: wrap;
 }
+
+/* status — Geist-style badge: bordered pill, colored dot + label */
 .sk-chip {
   align-self: flex-start;
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-sm);
-  letter-spacing: 0.02em;
-  padding: 2px var(--space-8);
-  border-radius: var(--radius-round);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--muted);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--r-pill);
+  padding: 3px 9px 3px 7px;
+}
+.sk-chip::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: var(--r-pill);
+  background: currentColor;
 }
 .sk-chip-live {
-  color: var(--color-bg);
-  background: var(--color-attention);
+  color: var(--green);
 }
 .sk-chip-expired,
 .sk-chip-deactivated {
-  color: var(--color-fg-secondary);
-  background: var(--color-bg-component);
-  border: 1px solid var(--color-border);
+  color: var(--faint);
 }
+
 .sk-edit-panel {
   display: flex;
   flex-direction: column;
-  gap: var(--space-16);
-  padding-top: var(--space-16);
-  border-top: 1px solid var(--color-border);
+  gap: var(--s-16);
+  padding-top: var(--s-16);
+  border-top: 1px solid var(--border);
 }
 .sk-empty {
-  font-size: var(--font-size-p);
-  color: var(--color-fg-secondary);
+  font-size: var(--t-body);
+  color: var(--muted);
+  padding: var(--s-16) 0;
 }
 
-/* tabs (segmented control with sliding pill) */
+/* ── tabs (segmented control with sliding highlight) ───────────────────── */
 .sk-tabs {
   position: relative;
   display: flex;
   align-items: center;
-  gap: var(--space-8);
+  gap: 2px;
   width: fit-content;
-  padding: 2px;
-  background-color: var(--color-bg);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-round);
+  padding: 3px;
+  background-color: var(--gray-200);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
   isolation: isolate;
-  font-family: var(--font-family);
+  font-family: var(--font-sans);
 }
 .sk-tabs-hover {
   position: absolute;
-  top: 2px;
+  top: 3px;
   left: 0;
-  height: calc(100% - 4px);
-  border-radius: var(--radius-round);
-  background-color: var(--color-border);
+  height: calc(100% - 6px);
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.04);
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.25s ease;
   z-index: 0;
   pointer-events: none;
 }
@@ -423,14 +514,15 @@
 }
 .sk-tabs-active {
   position: absolute;
-  top: 2px;
+  top: 3px;
   left: 0;
-  height: calc(100% - 4px);
-  border-radius: var(--radius-round);
-  background-color: var(--color-text);
+  height: calc(100% - 6px);
+  border-radius: 4px;
+  background-color: var(--bg);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   transition:
-    transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-    width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 1;
 }
 .sk-tabs-btn {
@@ -440,16 +532,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--space-8) var(--space-16);
+  padding: 6px var(--s-12);
   border: none;
   background: transparent;
   cursor: pointer;
   font-family: inherit;
-  font-size: var(--font-size-button-sm);
-  font-weight: 400;
-  line-height: var(--line-height-button-sm);
-  letter-spacing: 0.16px;
-  color: var(--color-text);
+  font-size: var(--t-meta);
+  font-weight: 500;
+  line-height: 1;
+  color: var(--muted);
   user-select: none;
   white-space: nowrap;
 }
@@ -458,10 +549,10 @@
   inset: 0;
   display: flex;
   align-items: center;
-  gap: var(--space-8);
-  padding: 2px;
+  gap: 2px;
+  padding: 3px;
   pointer-events: none;
-  transition: clip-path 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: clip-path 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 2;
 }
 .sk-tabs-overlay-label {
@@ -469,12 +560,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--space-8) var(--space-16);
+  padding: 6px var(--s-12);
   font-family: inherit;
-  font-size: var(--font-size-button-sm);
-  font-weight: 400;
-  line-height: var(--line-height-button-sm);
-  letter-spacing: 0.16px;
-  color: var(--color-gray-50);
+  font-size: var(--t-meta);
+  font-weight: 500;
+  line-height: 1;
+  color: var(--ink);
   white-space: nowrap;
 }

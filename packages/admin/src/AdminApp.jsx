@@ -29,11 +29,12 @@ export default function AdminApp({
           onChange={setTab}
         />
       </header>
-      {tab === 'create' ? (
+      {/* Create stays mounted (just hidden) so its in-progress form — label,
+          duration, item selection — survives switching to Manage and back. */}
+      <div hidden={tab !== 'create'}>
         <CreateView apiBase={apiBase} items={items} onCreated={() => setCreatedAt(Date.now())} />
-      ) : (
-        <ManageView key={createdAt} apiBase={apiBase} items={items} />
-      )}
+      </div>
+      {tab === 'manage' && <ManageView key={createdAt} apiBase={apiBase} items={items} />}
     </div>
   )
 }
@@ -142,6 +143,9 @@ function ItemToggles({ items, orderedIds, onToggle, onReorder }) {
       ))}
       {unselectedItems.map((p) => (
         <li key={p.id} className="sk-toggle-row">
+          {/* Disabled handle: unselected items aren't in the ordered set, so they
+              can't be reordered. Keeps the slot aligned and reads as inactive. */}
+          <span className="sk-drag-handle sk-drag-handle-disabled" aria-hidden="true" />
           <button
             type="button"
             className="sk-switch"
@@ -210,7 +214,7 @@ function CreateView({ apiBase, items, onCreated }) {
   return (
     <div className="sk-panel">
       <label className="sk-field">
-        <span className="sk-field-label">Internal label</span>
+        <span className="sk-field-label">Label</span>
         <input
           className="sk-input"
           value={label}
@@ -225,7 +229,7 @@ function CreateView({ apiBase, items, onCreated }) {
       </div>
 
       <div className="sk-field">
-        <span className="sk-field-label">Items shown</span>
+        <span className="sk-field-label">Included</span>
         <ItemToggles items={items} orderedIds={orderedIds} onToggle={toggle} onReorder={reorder} />
       </div>
 
@@ -235,12 +239,12 @@ function CreateView({ apiBase, items, onCreated }) {
         disabled={phase === 'working' || orderedIds.length === 0}
         onClick={generate}
       >
-        {phase === 'working' ? 'Persisting → deploying → verifying…' : 'Generate URL'}
+        {phase === 'working' ? 'Creating link…' : 'Create link'}
       </button>
 
       {phase === 'done' && result && (
         <div className="sk-result-ok">
-          <span className="sk-result-label">✓ Live - verified deployed</span>
+          <span className="sk-result-label">Live and verified</span>
           <button
             type="button"
             className="sk-copy"
@@ -254,7 +258,7 @@ function CreateView({ apiBase, items, onCreated }) {
 
       {result?.orphans?.length > 0 && (
         <div className="sk-result-warn">
-          ⚠ These ids don’t match any item and won’t appear: {result.orphans.join(', ')}
+          These ids don’t match any item and won’t appear: {result.orphans.join(', ')}
         </div>
       )}
 
@@ -414,7 +418,7 @@ function VariantRow({ apiBase, variant, items, onChanged }) {
       {error && <div className="sk-result-err">{error}</div>}
       {orphans.length > 0 && (
         <div className="sk-result-warn">
-          ⚠ These ids don’t match any item and won’t appear: {orphans.join(', ')}
+          These ids don’t match any item and won’t appear: {orphans.join(', ')}
         </div>
       )}
     </li>
