@@ -1,14 +1,15 @@
 # Installing speakeasy
 
 This guide is written for the **coding agent** (or developer) wiring speakeasy
-into a site. The site owner hands you their repo and this file; you do the
-integration. The end state: the owner can mint a secret URL from a local
-dashboard, hand it to one person, and revoke it - with no admin surface and no
-private data on the deployed site until a live slug asks for it.
+into a site. The site owner hands you their repo and this file, and you do the
+integration. The end state: the owner can create a secret link from a local
+dashboard, hand it to whoever they choose, and revoke it. There is no admin surface in
+production, and no private data reaches the deployed site until a live slug asks
+for it.
 
 A complete, runnable reference lives in [`examples/demo`](examples/demo). It
 wires every seam below with the `fs` adapter on localhost. **Read it first and
-mirror its structure** - it is the canonical example this guide describes.
+mirror its structure**; it is the canonical example this guide describes.
 
 ---
 
@@ -16,17 +17,18 @@ mirror its structure** - it is the canonical example this guide describes.
 
 speakeasy needs three things from the host. Confirm all three before starting:
 
-1. **A server-side endpoint** you can deploy - somewhere to run `handleLookup`
-   at request time (a serverless/edge function, or any Node route).
-2. **Routing control** - the ability to route an arbitrary top-level
-   `/<slug>` to the app, and to expose the lookup endpoint at a fixed path.
-3. **Your own client code** - the app can read the slug, call the endpoint, and
+1. **A server-side endpoint you can deploy:** somewhere to run `handleLookup` at
+   request time (a serverless or edge function, or any Node route).
+2. **Routing control:** the ability to route an arbitrary top-level `/<slug>` to
+   the app, and to expose the lookup endpoint at a fixed path.
+3. **Your own client code:** the app can read the slug, call the endpoint, and
    render the result.
 
-✅ Coded sites on Vercel / Netlify / Cloudflare / self-hosted Node.
-⚠️ Webflow **Cloud** (Cloudflare Workers) and Wix **Velo** - possible, but you
+✅ Coded sites on Vercel, Netlify, Cloudflare, or self-hosted Node.
+⚠️ Webflow **Cloud** (Cloudflare Workers) and Wix **Velo** are possible, but you
 reimplement the server seam on their runtime using `@speakeasy/core`.
-❌ No-code Squarespace / Wix / classic Webflow - no custom backend; not possible.
+❌ No-code Squarespace, Wix, or classic Webflow have no custom backend, so they
+are not possible.
 
 ---
 
@@ -34,7 +36,7 @@ reimplement the server seam on their runtime using `@speakeasy/core`.
 
 > **Not on npm yet.** These packages aren't published to a registry yet. Until
 > they are, vendor speakeasy: clone this repo and reference the packages via npm
-> workspaces, a local `npm link` / `file:` dependency, or a git dependency. The
+> workspaces, a local `npm link` or `file:` dependency, or a git dependency. The
 > `@speakeasy/*` names below are what your imports resolve to once linked. Once
 > published, install will simply be:
 
@@ -42,8 +44,8 @@ reimplement the server seam on their runtime using `@speakeasy/core`.
 npm install @speakeasy/core @speakeasy/server @speakeasy/cli @speakeasy/admin
 ```
 
-`@speakeasy/admin` is only needed if you mount the React dashboard (step 5a);
-the CLI (step 5b) is an alternative that needs neither React nor a dev plugin.
+`@speakeasy/admin` is only needed if you mount the React dashboard (step 5a). The
+CLI (step 5b) is an alternative that needs neither React nor a dev plugin.
 
 ## 2. Config - `speakeasy.config.js`
 
@@ -62,7 +64,7 @@ export default {
 
 ## 3. Content source - what a variant can reveal
 
-The single decoupling seam. Implement `items()` returning every item the admin
+The single decoupling seam. Implement `items()`, returning every item the admin
 can toggle. See [`examples/content.example.js`](examples/content.example.js) and
 the demo's [`content.js`](examples/demo/content.js).
 
@@ -72,35 +74,40 @@ export default {
   async items() {
     return [
       // PUBLIC items already ship in the client bundle → no `data` needed.
-      { id: 'about', title: 'About', visibility: 'public' },
+      // `title` is the row's label in the admin; `meta` is an optional second line.
+      { id: 'about', title: 'About', meta: 'Studio', visibility: 'public' },
       // PRIVATE items live server-only. `data` is what the lookup endpoint
       // returns to a visitor holding a live slug that includes this id.
-      { id: 'case-secret', title: 'Confidential', visibility: 'private',
-        data: { /* the full payload the client renders */ } },
+      { id: 'case-secret', title: 'Confidential', meta: 'Acme · under NDA',
+        visibility: 'private', data: { /* the full payload the client renders */ } },
     ]
   },
 }
 ```
 
-Key model: **public content is assumed to already be in your client bundle**;
+Each item is `{ id, title, meta?, visibility, data? }`. `title` labels the row in the
+admin (and the variant view); `meta` is an optional secondary line (e.g. a company or
+status); `data` is the private payload sent only to a live slug that includes the item.
+
+Key model: **public content is assumed to already be in your client bundle**, so
 only *private* `data` travels over the wire, and only when a live slug requests
-it. If your site fetches all content per-request (no public catalog in the
-bundle), rethink what "public vs private" means for you before proceeding.
+it. If your site fetches all content per request (no public catalog in the
+bundle), rethink what "public versus private" means for you before proceeding.
 
 ## 4. Storage adapter - how the manifest persists
 
-- **`git`** - the manifest is a committed file; `persist` writes, commits, and
-  pushes. The push *is* the deploy. Pair with the HTTP verifier (default), which
-  polls `prodUrl + lookupPath` until the change is live. Use this on static
-  hosts (Vercel/Netlify/Cloudflare Pages).
-- **`fs`** - write the manifest and stop. For a long-running Node host with a
-  writable disk, or local dev. Verification is a no-op.
-- **Custom** - pass `storage: { read(), persist(manifest, message), kind }` to
+- **`git`:** the manifest is a committed file. `persist` writes, commits, and
+  pushes, so the push is the deploy. Pair it with the HTTP verifier (default),
+  which polls `prodUrl + lookupPath` until the change is live. Use this on static
+  hosts (Vercel, Netlify, Cloudflare Pages).
+- **`fs`:** write the manifest and stop. For a long-running Node host with a
+  writable disk, or for local dev. Verification is a no-op.
+- **Custom:** pass `storage: { read(), persist(manifest, message), kind }` to
   back it with a KV store, S3, a database, or a constrained runtime (Wix Velo).
 
 ## 5. The admin (operator-only, never deployed)
 
-**a) Dashboard** - mount the dev-only Vite plugin and a dev-only `/admin` route:
+**a) Dashboard.** Mount the dev-only Vite plugin and a dev-only `/admin` route:
 
 ```js
 // vite.config.js
@@ -116,11 +123,11 @@ import '@speakeasy/admin/admin.css'
 export default () => <AdminApp />
 ```
 
-The plugin is `apply: 'serve'` - it exists only in the dev server and is never
-in a production build. That is the whole security model: **the operator keeps
-the admin secret by not deploying it.**
+The plugin is `apply: 'serve'`, so it exists only in the dev server and never in
+a production build. That is the whole security model: **the operator keeps the
+admin secret by not deploying it.**
 
-**b) Or the CLI** - no UI, no dev plugin. JSON output by default (agent-friendly):
+**b) Or the CLI.** No UI, no dev plugin. JSON output by default (agent-friendly):
 
 ```bash
 speakeasy create --label "Acme - Spring" --items about,case-secret --duration 30
@@ -144,15 +151,16 @@ export default async function (req, res) {
 }
 ```
 
-Unknown, deactivated, and expired slugs all return the **same 404** - a visitor
-can't detect a slug ever existed. A live slug returns `{ ids, items }`:
-`ids` is the full curated set in order; `items` carries only the private payloads.
+Unknown, deactivated, and expired slugs all return the **same 404**, so a visitor
+cannot detect that a slug ever existed. A live slug returns `{ ids, items }`:
+`ids` is the full curated set in order, and `items` carries only the private
+payloads.
 
-**Optional hardening - rate-limit the endpoint.** This is the one surface a slug
+**Optional hardening: rate-limit the endpoint.** This is the one surface a slug
 guesser can script against. The `62^12` keyspace already makes brute force
 hopeless, but throttling makes a scripted run die loud and cheap. Wrap the
-handler with the built-in limiter (keyed by client IP, so it's slug-independent
-and leaks nothing about which slugs exist - a throttled caller gets `429`
+handler with the built-in limiter (keyed by client IP, so it is slug-independent
+and leaks nothing about which slugs exist, since a throttled caller gets `429`
 whether the guess was real or junk):
 
 ```js
@@ -170,17 +178,17 @@ export default async function (req, res) {
 ```
 
 > **Serverless caveat:** the default in-memory store only counts within one warm
-> instance - across cold starts and regions, bursts slip through. It's best-effort
-> shedding, not a hard cap. For a firm limit on a serverless host, use your
-> platform's edge rate limiting / WAF, or pass a `store` backed by a shared
-> service (Vercel KV, Upstash, Redis). On a long-lived server (Express) the
-> in-memory default is already a real limit.
+> instance. Across cold starts and regions, bursts slip through, so it is
+> best-effort shedding, not a hard cap. For a firm limit on a serverless host,
+> use your platform's edge rate limiting or WAF, or pass a `store` backed by a
+> shared service (Vercel KV, Upstash, Redis). On a long-lived server (Express)
+> the in-memory default is already a real limit.
 
 ## 7. Host rewrite - route `/<slug>` to the app
 
 Each platform differs. Recipes (Vercel, Netlify, Cloudflare, nginx) are in
-[`docs/host-rewrites.md`](docs/host-rewrites.md). Two things must be true:
-the lookup endpoint is reachable at `prodUrl + lookupPath`, and `/<slug>` falls
+[`docs/host-rewrites.md`](docs/host-rewrites.md). Two things must be true: the
+lookup endpoint is reachable at `prodUrl + lookupPath`, and `/<slug>` falls
 through to your SPA so client routing can read the slug.
 
 ## 8. The visitor view - render the variant, or an identical dead end
@@ -209,10 +217,10 @@ else {
 
 ## Verification checklist (also the audit checklist)
 
-Run these after wiring it up - and any time a technical reviewer audits the deploy:
+Run these after wiring it up, and any time a technical reviewer audits the deploy:
 
 - [ ] **No private data in the public bundle.** Grep the built client output for
-      a known private payload string - it must be **absent**. Private `data`
+      a known private payload string. It must be **absent**. Private `data`
       should appear only in a live lookup response.
 - [ ] **No admin in production.** The deployed site exposes only `lookupPath`.
       The Vite plugin is `apply: 'serve'`; there is no `/admin` route or
@@ -221,17 +229,17 @@ Run these after wiring it up - and any time a technical reviewer audits the depl
       garbage path all return the identical 404 from the endpoint *and* render
       the identical "not found" view in the client.
 - [ ] **Deploy verifies before reporting live.** With `git` storage, the
-      dashboard/CLI reports success only after the HTTP verifier confirms the
-      change is live (or warns that it couldn't verify before timeout).
+      dashboard or CLI reports success only after the HTTP verifier confirms the
+      change is live (or warns that it could not verify before timeout).
 - [ ] **Lookup endpoint is throttled.** The lookup wraps `createRateLimiter`
-      (or platform edge rate limiting / WAF on a serverless host). A burst of
-      misses from one client gets `429`s - and the throttle is slug-independent,
+      (or platform edge rate limiting or a WAF on a serverless host). A burst of
+      misses from one client gets `429`s, and the throttle is slug-independent,
       so it never reveals a live slug.
 
 ## Not the right tool when
 
 - The secret needs real access control, an audit trail, or per-identity
-  revocation - speakeasy is **obscurity + curation + lifecycle, not auth**. URLs
-  leak via history, `Referer`, and logs.
-- The host can't run any endpoint (pure static, no functions).
-- You need millions of per-user pages - this is one JSON manifest, one operator.
+  revocation. speakeasy is **obscurity + curation + lifecycle, not auth**, and
+  URLs leak via history, `Referer`, and logs.
+- The host cannot run any endpoint (pure static, no functions).
+- You need millions of per-user pages. This is one JSON manifest, one operator.

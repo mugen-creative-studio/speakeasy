@@ -73,7 +73,7 @@ function renderPretty(data) {
     if (!data.variants.length) return '(no variants)'
     return data.variants
       .map((v) => {
-        const expiry = v.daysLeft === null ? 'no expiry' : `${v.daysLeft}d left`
+        const expiry = Number.isFinite(v.daysLeft) ? `${v.daysLeft}d left` : 'no expiry'
         return `[${v.state}] ${v.label || '(no label)'}\n  ${v.url}\n  ${v.items.length} item(s)${v.state === 'live' ? ` · ${expiry}` : ''}`
       })
       .join('\n\n')

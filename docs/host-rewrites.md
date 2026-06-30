@@ -15,7 +15,7 @@ Two things must be true:
 
 ## Vercel
 
-`vercel.json` - keep the SPA rewrite, exclude `/api`:
+`vercel.json`, keeping the SPA rewrite and excluding `/api`:
 
 ```json
 {
@@ -27,7 +27,7 @@ Two things must be true:
 ```
 
 Put the lookup handler at `api/variant.js` (see the server package's
-`handleLookup`). Adding an `api/` directory drops Vite's implicit SPA rewrite -
+`handleLookup`). Adding an `api/` directory drops Vite's implicit SPA rewrite, so
 ship the `vercel.json` in the same commit.
 
 ## Netlify
@@ -54,7 +54,7 @@ location /     { try_files $uri /index.html; }
 
 ## A note on secrecy
 
-There is no admin surface in production - the admin server runs only in dev
+There is no admin surface in production. The admin server runs only in dev
 (the Vite plugin is `apply: 'serve'`) or via the CLI on your machine. The
 deployed site only ever exposes the read-only lookup endpoint, which returns an
 identical 404 for unknown, deactivated, and expired slugs.
