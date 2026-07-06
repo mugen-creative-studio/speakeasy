@@ -44,8 +44,10 @@ are not possible.
 npm install @speakeasy/core @speakeasy/server @speakeasy/cli @speakeasy/admin
 ```
 
-`@speakeasy/admin` is only needed if you mount the React dashboard (step 5a). The
-CLI (step 5b) is an alternative that needs neither React nor a dev plugin.
+`@speakeasy/admin` is only needed if you mount the React dashboard (step 5a),
+which requires `react` and `react-dom` (>=18) as peer dependencies in your
+project. The CLI (step 5b) is an alternative that needs neither React nor a dev
+plugin.
 
 ## 2. Config - `speakeasy.config.js`
 
@@ -114,7 +116,11 @@ bundle), rethink what "public versus private" means for you before proceeding.
 
 ## 5. The admin (operator-only, never deployed)
 
-**a) Dashboard.** Mount the dev-only Vite plugin and a dev-only `/admin` route:
+**a) Dashboard.** The dashboard is React, and `react` + `react-dom` (>=18) are
+**peer dependencies** it does not bundle: your project must already have them
+installed. If your site is not a React app, do not add React just for this, use
+the CLI (5b) instead. Mount the dev-only Vite plugin and a dev-only `/admin`
+route:
 
 ```js
 // vite.config.js
