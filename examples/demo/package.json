@@ -1,5 +1,6 @@
 {
   "name": "speakeasy-demo",
+  "version": "0.0.0",
   "private": true,
   "type": "module",
   "description": "Runnable demo: a design-studio site whose secret variants reveal NDA'd case studies. Localhost-only, fs storage, the reference implementation INSTALL.md points at.",
