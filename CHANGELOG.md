@@ -6,6 +6,18 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+- `docs/using-speakeasy.md`: a plain-language day-to-day guide for site owners
+  (create, share, revoke; no coding), linked from the README and handed off at
+  the end of INSTALL.md.
+- README "See it in two minutes": clone-and-run demo instructions with the
+  demo's live slug, dead URL, and dashboard to compare.
+- README path for non-developers without a coding agent: hand INSTALL.md to
+  any web developer for the one-time setup; daily use needs no developer.
+
+### Fixed
+- README: the CLI command list now includes `speakeasy items`.
+
 ## [0.1.2] - 2026-07-06
 
 ### Fixed

@@ -7,6 +7,12 @@ dashboard, hand it to whoever they choose, and revoke it. There is no admin surf
 production, and no private data reaches the deployed site until a live slug asks
 for it.
 
+When you finish, hand the owner
+[`docs/using-speakeasy.md`](docs/using-speakeasy.md), the plain-language guide
+to daily use (create, share, revoke; no coding). Tell them the exact command
+that starts their dev server and the dashboard URL, since that is the one
+site-specific detail the guide cannot know.
+
 A complete, runnable reference lives in [`examples/demo`](examples/demo). It
 wires every seam below with the `fs` adapter on localhost. **Read it first and
 mirror its structure**; it is the canonical example this guide describes.

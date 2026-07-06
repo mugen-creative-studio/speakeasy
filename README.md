@@ -21,6 +21,24 @@ the CLI. A variant reveals a curated list of *items*, and you decide what an ite
 is: a case study, a document, a draft page, a photo set. The mechanism does not
 care what the content is.
 
+## See it in two minutes
+
+You need [Node 20+](https://nodejs.org) and `git` installed; the rest is
+copy-paste:
+
+```bash
+git clone https://github.com/mugen-creative-studio/speakeasy.git
+cd speakeasy && npm install
+npm run dev --workspace examples/demo
+```
+
+Then open `http://localhost:5173` and compare three views of the same site:
+
+- `/` - the public site, nothing to see
+- `/Vb7nK2pQ9mXr` - a live secret link revealing hidden case studies
+- `/anything-else` - the 404 every dead or guessed URL gets
+- `/admin` - the dashboard where links are minted and revoked
+
 ## Can you use this?
 
 - ✅ **Yes** if your site is a coded site in a repo that deploys to Vercel,
@@ -34,6 +52,13 @@ care what the content is.
 - 🤷 **Not sure?** Ask your coding agent: *"Can you add a serverless endpoint and
   a catch-all route to this site?"* If the answer is yes, you are in the ✅
   column.
+
+**No coding agent and not a developer?** You can still use speakeasy; you just
+need help with the one-time installation. Hand [INSTALL.md](INSTALL.md) to any
+web developer (it is a small, well-defined job against a working reference).
+After that, **day-to-day use needs no developer at all**: creating, sharing,
+and revoking links is point-and-click, covered in the plain-language
+[owner's guide](docs/using-speakeasy.md).
 
 ## Why it's safe to deploy
 
@@ -60,7 +85,7 @@ both) for how you want to manage variants.
 | --- | --- | --- |
 | [`@speakeasy/core`](packages/core) | The engine, with zero dependencies. It generates the unguessable slugs, defines the *manifest* (the record of which slug reveals which items and when it expires), and decides whether a given slug is live, expired, or revoked. | Always |
 | [`@speakeasy/server`](packages/server) | The part that answers a visitor. Given a slug it returns the curated items, or the identical 404 for anything unknown, expired, or revoked. You plug it into your app (as Express/connect middleware or a Vite dev plugin) and point it at where your content and manifest live. | Always |
-| [`@speakeasy/cli`](packages/cli) | A terminal command (`speakeasy create`, `list`, `deactivate`, `set-items`, `set-duration`, `lookup`) for minting, re-curating, and revoking variants without a UI. Outputs JSON, so a coding agent can drive it too. | If you manage variants from the command line |
+| [`@speakeasy/cli`](packages/cli) | A terminal command (`speakeasy items`, `create`, `list`, `deactivate`, `set-items`, `set-duration`, `lookup`) for minting, re-curating, and revoking variants without a UI. Outputs JSON, so a coding agent can drive it too. | If you manage variants from the command line |
 | [`@speakeasy/admin`](packages/admin) | A small React dashboard for the same create / curate / revoke actions, for when you'd rather click than type. Runs only in your dev environment; it is never deployed to production. Requires `react` + `react-dom` 18+ already in your project (peer dependency); if your site isn't React, use the CLI instead. | If you want the visual dashboard |
 
 ## The four seams that make it agnostic
@@ -129,7 +154,10 @@ export default async function (req, res) {
 ## Running it
 
 speakeasy is not a standalone app you launch; `core` and `server` run as part of
-your own site. You manage variants one of two ways:
+your own site. Day-to-day use (create, share, revoke) needs no coding; the
+plain-language guide for site owners is
+[docs/using-speakeasy.md](docs/using-speakeasy.md). You manage variants one of
+two ways:
 
 **Dashboard** - start your usual dev server and open the dev-only `/admin` route:
 
