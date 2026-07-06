@@ -56,13 +56,10 @@ an individual is officially representing the community in public spaces.
 ## Enforcement
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
-reported to the community leaders responsible for enforcement through GitHub
-(open a private report via the repository's **Security** tab, or contact a
-maintainer through their GitHub profile). All complaints will be reviewed and
-investigated promptly and fairly.
-
-<!-- Optional: replace the line above with a dedicated contact email if you
-prefer, e.g. conduct@yourdomain. -->
+reported to the community leaders responsible for enforcement by emailing
+**security@mugencreative.studio**, or through GitHub by opening a private report
+via the repository's **Security** tab. Complaints will be reviewed and
+investigated as fairly as circumstances allow.
 
 All community leaders are obligated to respect the privacy and security of the
 reporter of any incident.

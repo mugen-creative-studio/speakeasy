@@ -1,7 +1,11 @@
 # Contributing to speakeasy
 
 Thanks for your interest. speakeasy is a small, deliberately minimal project, so
-contributions that keep it small are the most welcome.
+contributions that keep it small fit best.
+
+Heads up: this is a personal project shared as-is. Issues and PRs are welcome,
+but a response or a merge may be slow, and may not come at all. Please open them
+anyway if you like, and feel free to fork if you need to move faster.
 
 ## Reporting security issues
 
@@ -69,5 +73,6 @@ a new concept. See the README for the seam overview.
 3. Make sure `npm test` passes. CI runs the same on every PR.
 4. Open a PR describing what changed and why. Link any related issue.
 
-Small, focused PRs are reviewed fastest. If you are planning something larger,
-open an issue first so we can agree on the shape before you build it.
+Small, focused PRs are easiest to review. If you are planning something larger,
+consider opening an issue first to talk through the shape (keeping in mind a
+reply is not guaranteed).

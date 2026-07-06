@@ -4,6 +4,10 @@
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 ![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen)
 
+> This is a personal project I built for fun and wanted to share. It's provided
+> as-is, so updates may be slow and I might not get to every issue or PR, but I'm
+> glad you're here.
+
 Share confidential content with whoever you choose, behind an unguessable URL,
 and revoke it when you're done.
 

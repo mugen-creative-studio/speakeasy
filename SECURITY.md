@@ -8,13 +8,14 @@ that matters.
 
 **Please do not open a public issue for security problems.**
 
-Use GitHub's private vulnerability reporting: go to the **Security** tab of this
-repository and choose **Report a vulnerability**. That opens a private advisory
-visible only to the maintainers. (Maintainers: enable this under
-*Settings → Security → Private vulnerability reporting*.)
+Email **security@mugencreative.studio** with the details. If you would rather
+report through GitHub, use its private vulnerability reporting: go to the
+**Security** tab of this repository and choose **Report a vulnerability**, which
+opens a private advisory visible only to the maintainers. (Maintainers: enable
+this under *Settings → Security → Private vulnerability reporting*.)
 
-Expect a best-effort response. This is a small project with no formal SLA, but
-reports are taken seriously and credited unless you ask otherwise.
+This is a small project with no formal SLA. Reports are read on a best-effort
+basis, taken seriously, and credited unless you ask otherwise.
 
 ## Supported versions
 

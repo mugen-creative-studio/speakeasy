@@ -10,3 +10,32 @@ dist/
 # Local screenshot/scratch output
 *.png
 .playwright-mcp/
+
+# Secrets & credentials
+.env.local
+.env.*.local
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa
+id_dsa
+id_ecdsa
+id_ed25519
+*.crt
+*.cer
+credentials
+credentials.json
+service-account*.json
+gcp-*.json
+*-key.json
+secrets.*
+.npmrc
+
+# Local config & tooling
+*.local
+/speakeasy.config.js
+.idea/
+.vscode/
+coverage/
+.DS_Store?
