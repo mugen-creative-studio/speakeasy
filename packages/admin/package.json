@@ -1,6 +1,6 @@
 {
   "name": "@speakeasy/admin",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "React admin dashboard for speakeasy confidential content variants. Self-contained styling (no host design system required); talks to @speakeasy/server's admin API.",
   "type": "module",
   "engines": {
