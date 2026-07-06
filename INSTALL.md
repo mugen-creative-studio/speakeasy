@@ -37,12 +37,6 @@ are not possible.
 Requires **Node 20 or newer** on the machine that runs the CLI or the dev
 dashboard (every package sets `engines.node >= 20`).
 
-> **Not on npm yet.** These packages aren't published to a registry yet. Until
-> they are, vendor speakeasy: clone this repo and reference the packages via npm
-> workspaces, a local `npm link` or `file:` dependency, or a git dependency. The
-> `@speakeasy/*` names below are what your imports resolve to once linked. Once
-> published, install will simply be:
-
 ```bash
 npm install @speakeasy/core @speakeasy/server @speakeasy/cli @speakeasy/admin
 ```
