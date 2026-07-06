@@ -78,9 +78,11 @@ both) for how you want to manage variants.
 
 ## Quick start
 
+Install the packages you need (`core` and `server` are the base; add `cli` or
+`admin` for how you manage variants):
+
 ```bash
-npm install   # workspaces: core, server, cli, admin
-npm test      # core unit tests plus the server end-to-end smoke test
+npm install @speakeasy/core @speakeasy/server @speakeasy/cli @speakeasy/admin
 ```
 
 > **Setting it up with an agent?** Point it at [INSTALL.md](INSTALL.md), the full
