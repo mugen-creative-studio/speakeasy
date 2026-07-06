@@ -29,8 +29,8 @@ export default function AdminApp({
           onChange={setTab}
         />
       </header>
-      {/* Create stays mounted (just hidden) so its in-progress form — label,
-          duration, item selection — survives switching to Manage and back. */}
+      {/* Create stays mounted (just hidden) so its in-progress form (label,
+          duration, item selection) survives switching to Manage and back. */}
       <div hidden={tab !== 'create'}>
         <CreateView apiBase={apiBase} items={items} onCreated={() => setCreatedAt(Date.now())} />
       </div>

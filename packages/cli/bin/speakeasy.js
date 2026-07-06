@@ -184,7 +184,7 @@ const HELP = `speakeasy - confidential content variants
 
 Usage:
   speakeasy items                                 list available content items
-  speakeasy create --label <l> --items a,b,c [--duration <days|none>]
+  speakeasy create --label <l> --items a,b,c [--duration <days|none>]   (default: 30)
   speakeasy list [--all]                          live variants (or all)
   speakeasy deactivate <slug>
   speakeasy set-duration <slug> --duration <days|none>

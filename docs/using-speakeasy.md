@@ -33,7 +33,8 @@ closes the dashboard, never your site.
 1. In the dashboard, choose **New variant**.
 2. Give it a label you will recognize later ("Acme - spring pitch").
 3. Tick the items this person should see, in the order they should see them.
-4. Pick how long the link should live (or "no expiry").
+4. Pick how long the link should live (or "no expiry"). If you don't choose,
+   links last 30 days.
 5. Create it, wait for the dashboard to confirm the change is **live**, then
    copy the link and send it.
 
