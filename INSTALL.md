@@ -105,6 +105,13 @@ bundle), rethink what "public versus private" means for you before proceeding.
 - **Custom:** pass `storage: { read(), persist(manifest, message), kind }` to
   back it with a KV store, S3, a database, or a constrained runtime (Wix Velo).
 
+> **Public-repo footgun (`git` storage).** The committed manifest lists every
+> slug and label in plain text. If the repository holding it is **public**,
+> anyone can read them straight from source and bypass the unguessable-URL model
+> entirely. The repo holding the manifest (and your private content source) must
+> be **private**, or the manifest must live outside any public repo. See the
+> audit checklist below.
+
 ## 5. The admin (operator-only, never deployed)
 
 **a) Dashboard.** Mount the dev-only Vite plugin and a dev-only `/admin` route:
@@ -231,6 +238,11 @@ Run these after wiring it up, and any time a technical reviewer audits the deplo
 - [ ] **Deploy verifies before reporting live.** With `git` storage, the
       dashboard or CLI reports success only after the HTTP verifier confirms the
       change is live (or warns that it could not verify before timeout).
+- [ ] **The manifest repo is private (`git` storage).** The committed manifest
+      exposes every slug and label to anyone who can read the repository. The
+      repo holding it (and the private content source) must be **private**, or
+      the manifest must live outside any public repo. A public repo defeats the
+      whole obscurity model.
 - [ ] **Lookup endpoint is throttled.** The lookup wraps `createRateLimiter`
       (or platform edge rate limiting or a WAF on a serverless host). A burst of
       misses from one client gets `429`s, and the throttle is slug-independent,
