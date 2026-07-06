@@ -1,8 +1,15 @@
 name: Release
 
-# Publishes every @speakeasy/* workspace to npm when a v* tag is pushed.
-# The tag must match the version in package.json (checked below) so a
-# mistagged release fails fast instead of publishing the wrong version.
+# Publishes every @speakeasy/* workspace to npm when a v* tag is pushed, using
+# GitHub Actions OIDC trusted publishing: no npm token is ever stored, so there
+# is nothing to steal. Provenance is generated automatically because the repo
+# and packages are public.
+#
+# One-time bootstrap: a trusted publisher is configured in each package's
+# npmjs.com settings, which requires the package to already exist. Publish the
+# first version of each package manually (npm login + 2FA), then register this
+# repo + workflow as a Trusted Publisher for each package. After that, tag
+# pushes publish here with no secrets. See RELEASING.md.
 on:
   push:
     tags:
@@ -13,14 +20,18 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      id-token: write # npm provenance
+      id-token: write # OIDC: exchanged for a short-lived npm publish token
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22.x
+          node-version: 22 # trusted publishing needs Node >= 22.14
           registry-url: 'https://registry.npmjs.org'
           cache: npm
+
+      # Trusted publishing needs npm >= 11.5.1; Node 22 still ships npm 10.
+      - name: Upgrade npm
+        run: npm install -g npm@latest
 
       - run: npm ci
 
@@ -36,7 +47,8 @@ jobs:
       - run: npm run format:check
       - run: npm test
 
+      # OIDC trusted publishing: no NODE_AUTH_TOKEN. Provenance is automatic
+      # under OIDC (--provenance is explicit intent). --ignore-scripts avoids
+      # running any lifecycle scripts during the sensitive publish step.
       - name: Publish workspaces
-        run: npm publish --workspaces --provenance
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --workspaces --provenance --ignore-scripts

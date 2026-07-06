@@ -45,6 +45,11 @@ care what the content is.
 - **One indistinguishable 404.** Unknown, deactivated, and expired slugs all
   return the identical response.
 
+> **The one thing that's on you:** with `git` storage the manifest is a
+> committed file, so keep the repository holding it **private**. A public repo
+> exposes every slug and defeats the model. See [SECURITY.md](SECURITY.md) and
+> [INSTALL.md](INSTALL.md).
+
 ## Packages
 
 | Package | What it is |
