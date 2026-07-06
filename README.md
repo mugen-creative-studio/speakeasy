@@ -124,12 +124,36 @@ export default async function (req, res) {
 }
 ```
 
-Or skip the UI entirely:
+## Running it
+
+speakeasy is not a standalone app you launch; `core` and `server` run as part of
+your own site. You manage variants one of two ways:
+
+**Dashboard** - start your usual dev server and open the dev-only `/admin` route:
 
 ```bash
-speakeasy create --label "Acme - Spring" --items about,case-secret --duration 30
-speakeasy list
-speakeasy deactivate Xa9f2Qb7Lm3k
+npm run dev            # your site's dev server
+# then open http://localhost:5173/admin
+```
+
+**CLI** - run it inside your project with `npx`, or install it globally for a
+bare `speakeasy` command anywhere:
+
+```bash
+npx speakeasy create --label "Acme - Spring" --items about,case-secret --duration 30
+npx speakeasy list
+npx speakeasy deactivate Xa9f2Qb7Lm3k
+# or: npm install -g @speakeasy/cli   ->   then just `speakeasy list`
+```
+
+The visitor-facing lookup (`/<slug>` to the curated content, or an identical
+404) needs no launching: it runs on every request to your deployed site.
+
+To watch all three together, run the bundled demo:
+
+```bash
+npm run dev --workspace examples/demo
+# public site at /, dashboard at /admin, a variant at /<slug>
 ```
 
 ## License
