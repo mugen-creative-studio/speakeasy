@@ -16,7 +16,7 @@ server, CLI, React admin) with `git`/`fs` storage adapters and a runnable demo.
   lifecycle rules, with zero dependencies.
 - Server request handlers plus pluggable adapters (storage, deploy verifier,
   content source); mountable as connect/Express middleware or a Vite dev plugin.
-- CLI (`speakeasy`): create, list, deactivate, recurate, lookup, JSON-first.
+- CLI (`speakeasy`): create, list, deactivate, set-items, set-duration, lookup, JSON-first.
 - React admin dashboard with self-contained styling.
 - `git` and `fs` storage adapters and a runnable demo.
 - TypeScript declarations (`.d.ts`) for the public API of every package.

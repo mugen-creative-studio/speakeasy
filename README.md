@@ -60,7 +60,7 @@ both) for how you want to manage variants.
 | --- | --- | --- |
 | [`@speakeasy/core`](packages/core) | The engine, with zero dependencies. It generates the unguessable slugs, defines the *manifest* (the record of which slug reveals which items and when it expires), and decides whether a given slug is live, expired, or revoked. | Always |
 | [`@speakeasy/server`](packages/server) | The part that answers a visitor. Given a slug it returns the curated items, or the identical 404 for anything unknown, expired, or revoked. You plug it into your app (as Express/connect middleware or a Vite dev plugin) and point it at where your content and manifest live. | Always |
-| [`@speakeasy/cli`](packages/cli) | A terminal command (`speakeasy create`, `list`, `deactivate`, `recurate`, `lookup`) for minting and revoking variants without a UI. Outputs JSON, so a coding agent can drive it too. | If you manage variants from the command line |
+| [`@speakeasy/cli`](packages/cli) | A terminal command (`speakeasy create`, `list`, `deactivate`, `set-items`, `set-duration`, `lookup`) for minting, re-curating, and revoking variants without a UI. Outputs JSON, so a coding agent can drive it too. | If you manage variants from the command line |
 | [`@speakeasy/admin`](packages/admin) | A small React dashboard for the same create / curate / revoke actions, for when you'd rather click than type. Runs only in your dev environment; it is never deployed to production. Requires `react` + `react-dom` 18+ already in your project (peer dependency); if your site isn't React, use the CLI instead. | If you want the visual dashboard |
 
 ## The four seams that make it agnostic
@@ -93,6 +93,7 @@ Then in your app:
 export default {
   prodUrl: 'https://yoursite.com',
   manifestPath: 'api/_variants.json',
+  lookupPath: '/api/variant',
   content: './content.js',
   storage: 'git',
 }

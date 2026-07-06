@@ -34,6 +34,9 @@ are not possible.
 
 ## 1. Install
 
+Requires **Node 20 or newer** on the machine that runs the CLI or the dev
+dashboard (every package sets `engines.node >= 20`).
+
 > **Not on npm yet.** These packages aren't published to a registry yet. Until
 > they are, vendor speakeasy: clone this repo and reference the packages via npm
 > workspaces, a local `npm link` or `file:` dependency, or a git dependency. The
@@ -101,7 +104,10 @@ bundle), rethink what "public versus private" means for you before proceeding.
 - **`git`:** the manifest is a committed file. `persist` writes, commits, and
   pushes, so the push is the deploy. Pair it with the HTTP verifier (default),
   which polls `prodUrl + lookupPath` until the change is live. Use this on static
-  hosts (Vercel, Netlify, Cloudflare Pages).
+  hosts (Vercel, Netlify, Cloudflare Pages). **Prerequisites:** `git` installed
+  on the operator's machine, and the manifest repo checked out with a remote, an
+  upstream-tracked branch, and working push credentials. `persist` runs a bare
+  `git push`; if it cannot push, the mint/revoke fails.
 - **`fs`:** write the manifest and stop. For a long-running Node host with a
   writable disk, or for local dev. Verification is a no-op.
 - **Custom:** pass `storage: { read(), persist(manifest, message), kind }` to
@@ -116,11 +122,12 @@ bundle), rethink what "public versus private" means for you before proceeding.
 
 ## 5. The admin (operator-only, never deployed)
 
-**a) Dashboard.** The dashboard is React, and `react` + `react-dom` (>=18) are
-**peer dependencies** it does not bundle: your project must already have them
-installed. If your site is not a React app, do not add React just for this, use
-the CLI (5b) instead. Mount the dev-only Vite plugin and a dev-only `/admin`
-route:
+**a) Dashboard.** The dashboard is React and mounts through a **Vite dev-server
+plugin**, so this path needs a Vite-based project with `react` + `react-dom`
+(>=18, peer dependencies the admin does not bundle) and `vite` +
+`@vitejs/plugin-react` already installed. If your host is not React + Vite (for
+example Next.js or a webpack app), do not add them just for this, use the CLI
+(5b) instead. Mount the dev-only plugin and a dev-only `/admin` route:
 
 ```js
 // vite.config.js
