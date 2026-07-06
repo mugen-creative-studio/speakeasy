@@ -52,12 +52,16 @@ care what the content is.
 
 ## Packages
 
-| Package | What it is |
-| --- | --- |
-| [`@speakeasy/core`](packages/core) | Pure logic: slug generation, manifest schema, servability and lifecycle rules. Zero dependencies. |
-| [`@speakeasy/server`](packages/server) | Request handlers plus pluggable adapters (storage, deploy verifier, content source). Mount it as connect/Express middleware or a Vite dev plugin. |
-| [`@speakeasy/cli`](packages/cli) | The `speakeasy` command: create, list, deactivate, recurate, lookup. JSON output by default, so agents can drive it. |
-| [`@speakeasy/admin`](packages/admin) | React admin dashboard. Self-contained styling, themed through CSS variables. |
+speakeasy is four small packages under the `@speakeasy` scope. Install only the
+ones you need: `core` and `server` are the base, then pick `cli` or `admin` (or
+both) for how you want to manage variants.
+
+| Package | What it does | You need it |
+| --- | --- | --- |
+| [`@speakeasy/core`](packages/core) | The engine, with zero dependencies. It generates the unguessable slugs, defines the *manifest* (the record of which slug reveals which items and when it expires), and decides whether a given slug is live, expired, or revoked. | Always |
+| [`@speakeasy/server`](packages/server) | The part that answers a visitor. Given a slug it returns the curated items, or the identical 404 for anything unknown, expired, or revoked. You plug it into your app (as Express/connect middleware or a Vite dev plugin) and point it at where your content and manifest live. | Always |
+| [`@speakeasy/cli`](packages/cli) | A terminal command (`speakeasy create`, `list`, `deactivate`, `recurate`, `lookup`) for minting and revoking variants without a UI. Outputs JSON, so a coding agent can drive it too. | If you manage variants from the command line |
+| [`@speakeasy/admin`](packages/admin) | A small React dashboard for the same create / curate / revoke actions, for when you'd rather click than type. Runs only in your dev environment; it is never deployed to production. | If you want the visual dashboard |
 
 ## The four seams that make it agnostic
 
