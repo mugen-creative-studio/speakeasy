@@ -24,9 +24,12 @@
   "scripts": {
     "test": "npm run test --workspaces --if-present",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "version:bump": "node scripts/bump.mjs",
+    "prerelease": "npm run format:check && npm test",
+    "release": "npm publish --workspaces"
   },
-  "license": "MIT",
+  "license": "Apache-2.0",
   "devDependencies": {
     "prettier": "^3.8.4"
   }

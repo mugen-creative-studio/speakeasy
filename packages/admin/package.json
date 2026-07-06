@@ -30,5 +30,8 @@
     "react": ">=18",
     "react-dom": ">=18"
   },
-  "license": "MIT"
+  "license": "Apache-2.0",
+  "publishConfig": {
+    "access": "public"
+  }
 }

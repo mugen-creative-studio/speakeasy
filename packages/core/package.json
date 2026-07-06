@@ -32,6 +32,9 @@
   "scripts": {
     "test": "node --test test/*.test.js"
   },
-  "license": "MIT",
-  "sideEffects": false
+  "license": "Apache-2.0",
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  }
 }
