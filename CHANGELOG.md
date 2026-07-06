@@ -6,6 +6,14 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-07-06
+
+### Added
+- A README in every published package, so the npm pages document what each
+  package does and point back to the full guides.
+- LICENSE and NOTICE files ship inside every published package, as Apache 2.0
+  intends.
+
 ## [0.1.0] - 2026-07-05
 
 First public release: stack-agnostic confidential content variants (core,
@@ -29,5 +37,6 @@ server, CLI, React admin) with `git`/`fs` storage adapters and a runnable demo.
 - Manifest writes are atomic (temp file + rename) in both storage adapters.
 - Licensed under Apache 2.0 (with NOTICE), copyright Mugen Creative Studio.
 
-[Unreleased]: https://github.com/mugen-creative-studio/speakeasy/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/mugen-creative-studio/speakeasy/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/mugen-creative-studio/speakeasy/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/mugen-creative-studio/speakeasy/releases/tag/v0.1.0

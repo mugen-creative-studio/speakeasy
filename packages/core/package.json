@@ -27,7 +27,8 @@
   },
   "types": "./src/index.d.ts",
   "files": [
-    "src"
+    "src",
+    "NOTICE"
   ],
   "scripts": {
     "test": "node --test test/*.test.js"

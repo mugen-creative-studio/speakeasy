@@ -24,7 +24,8 @@
   },
   "types": "./src/index.d.ts",
   "files": [
-    "src"
+    "src",
+    "NOTICE"
   ],
   "peerDependencies": {
     "react": ">=18",
