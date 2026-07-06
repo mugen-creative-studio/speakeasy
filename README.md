@@ -151,7 +151,8 @@ npx speakeasy deactivate Xa9f2Qb7Lm3k
 The visitor-facing lookup (`/<slug>` to the curated content, or an identical
 404) needs no launching: it runs on every request to your deployed site.
 
-To watch all three together, run the bundled demo:
+To watch all three together, run the bundled demo (from a clone of this repo,
+not an npm install):
 
 ```bash
 npm run dev --workspace examples/demo

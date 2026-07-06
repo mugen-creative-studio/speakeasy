@@ -1,6 +1,6 @@
 {
   "name": "@speakeasy/server",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Server-side request handlers and pluggable adapters (storage, deploy-verifier, content source) for speakeasy confidential content variants. Mountable as connect/Express middleware or a Vite dev plugin.",
   "type": "module",
   "engines": {
@@ -34,7 +34,7 @@
     "test": "node --test test/*.test.js"
   },
   "dependencies": {
-    "@speakeasy/core": "0.1.1"
+    "@speakeasy/core": "0.1.2"
   },
   "license": "Apache-2.0",
   "publishConfig": {
