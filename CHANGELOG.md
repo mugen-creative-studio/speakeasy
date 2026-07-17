@@ -10,13 +10,26 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `docs/using-speakeasy.md`: a plain-language day-to-day guide for site owners
   (create, share, revoke; no coding), linked from the README and handed off at
   the end of INSTALL.md.
-- README "See it in two minutes": clone-and-run demo instructions with the
-  demo's live slug, dead URL, and dashboard to compare.
 - README path for non-developers without a coding agent: hand INSTALL.md to
   any web developer for the one-time setup; daily use needs no developer.
+- `clientKey(req, { trustProxy })`: opt out of trusting `x-forwarded-for` on a
+  raw host with no trusted proxy (keys on the socket address). Defaults to true,
+  so managed hosts (Vercel, Netlify, Cloudflare) are unchanged.
+
+### Changed
+- README reorganized around the reader's path (can-you-use-it, why-it's-safe,
+  setup, daily use); dropped the standalone demo walkthrough.
 
 ### Fixed
 - README: the CLI command list now includes `speakeasy items`.
+
+### Security
+- The public lookup returns the identical 404 (never a 500) when the storage or
+  content source throws, preserving the indistinguishable-404 model on error.
+- Manifest lookups are own-key only (`Object.hasOwn`), so a slug such as
+  `__proto__` or `constructor` cannot resolve to an inherited object.
+- `git` storage stages the manifest with `git add --`, so a `manifestPath`
+  beginning with `-` cannot be parsed as a git flag.
 
 ## [0.1.2] - 2026-07-06
 

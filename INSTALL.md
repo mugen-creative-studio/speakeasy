@@ -176,7 +176,7 @@ cannot detect that a slug ever existed. A live slug returns `{ ids, items }`:
 `ids` is the full curated set in order, and `items` carries only the private
 payloads.
 
-**Optional hardening: rate-limit the endpoint.** This is the one surface a slug
+**Recommended hardening: rate-limit the endpoint.** This is the one surface a slug
 guesser can script against. The `62^12` keyspace already makes brute force
 hopeless, but throttling makes a scripted run die loud and cheap. Wrap the
 handler with the built-in limiter (keyed by client IP, so it is slug-independent
