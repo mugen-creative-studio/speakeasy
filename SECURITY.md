@@ -87,9 +87,10 @@ To keep the guarantees above actually true on your deployment:
   best-effort on serverless (per-instance); back it with a shared store for a
   hard cap. See INSTALL.md, section 6. The built-in limiter keys on
   `x-forwarded-for`, which is **spoofable** unless a trusted proxy overwrites it
-  (Vercel and Cloudflare do). If clients can reach the function directly, key on
-  a header your platform controls (e.g. Cloudflare's `cf-connecting-ip`) or the
-  socket address instead.
+  (Vercel and Cloudflare do). If clients can reach the function directly, pass
+  `clientKey(req, { trustProxy: false })` to key on the socket address and ignore
+  the header, or key on a header your platform controls (e.g. Cloudflare's
+  `cf-connecting-ip`) instead.
 - **Keep host bypass tokens in environment variables**, never committed. The
   repo gitignores `.env`, `.env.*`, and `.bypass-token`.
 

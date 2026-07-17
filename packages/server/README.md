@@ -18,7 +18,10 @@ it at your content and manifest:
   or write to disk), or bring your own `{ read, persist }`
 - `createHttpVerifier` / `noopVerifier` - confirm a change is live before
   reporting success
-- `createRateLimiter`, `clientKey` - optional throttle for the lookup endpoint
+- `createRateLimiter`, `clientKey` - optional throttle for the lookup endpoint.
+  `clientKey(req)` trusts the proxy's `x-forwarded-for` (correct on Vercel /
+  Netlify / Cloudflare); on a raw host clients can reach directly, pass
+  `clientKey(req, { trustProxy: false })` to key on the socket address instead
 
 ```bash
 npm install @speakeasy/core @speakeasy/server
