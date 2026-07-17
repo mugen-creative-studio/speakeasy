@@ -7,6 +7,11 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [Unreleased]
 
 ### Added
+- `speakeasy admin`: a standalone, browser-based dashboard that runs on any
+  project with one command (no Vite or React, no dev server). It serves a
+  dependency-free HTML dashboard and mounts the admin API on a local-only port
+  (`127.0.0.1`); nothing is deployed. The embedded Vite-plugin `/admin` route
+  stays for React sites that want it inline.
 - `docs/using-speakeasy.md`: a plain-language day-to-day guide for site owners
   (create, share, revoke; no coding), linked from the README and handed off at
   the end of INSTALL.md.

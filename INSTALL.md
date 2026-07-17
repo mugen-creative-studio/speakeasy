@@ -47,10 +47,11 @@ dashboard (every package sets `engines.node >= 20`).
 npm install @speakeasy/core @speakeasy/server @speakeasy/cli @speakeasy/admin
 ```
 
-`@speakeasy/admin` is only needed if you mount the React dashboard (step 5a),
-which requires `react` and `react-dom` (>=18) as peer dependencies in your
-project. The CLI (step 5b) is an alternative that needs neither React nor a dev
-plugin.
+`@speakeasy/admin` holds the dashboard UI. The standalone `speakeasy admin`
+command (step 5a) uses it and needs nothing extra (`@speakeasy/cli` pulls it in).
+Only the embedded Vite-plugin dashboard (step 5b) requires `react` and
+`react-dom` (>=18) as peer dependencies in your project. The CLI commands (step
+5c) need neither React nor a dev plugin.
 
 ## 2. Config - `speakeasy.config.js`
 
@@ -122,12 +123,24 @@ bundle), rethink what "public versus private" means for you before proceeding.
 
 ## 5. The admin (operator-only, never deployed)
 
-**a) Dashboard.** The dashboard is React and mounts through a **Vite dev-server
-plugin**, so this path needs a Vite-based project with `react` + `react-dom`
-(>=18, peer dependencies the admin does not bundle) and `vite` +
-`@vitejs/plugin-react` already installed. If your host is not React + Vite (for
-example Next.js or a webpack app), do not add them just for this, use the CLI
-(5b) instead. Mount the dev-only plugin and a dev-only `/admin` route:
+**a) Standalone dashboard (recommended, any stack).** One command starts a
+local, browser-based dashboard and opens it:
+
+```bash
+npx speakeasy admin        # reads ./speakeasy.config.js; add --port <n> to override
+```
+
+It serves a dependency-free HTML dashboard and mounts the admin API on the same
+local port, bound to `127.0.0.1`. It needs no Vite, no React, and no dev server,
+so it works on any project (Next.js, webpack, plain static, anything). It is
+local-only and never deployed - the same security model as the plugin below.
+This is what [`docs/using-speakeasy.md`](docs/using-speakeasy.md) tells the owner
+to run, so hand them that guide and you are done.
+
+**b) Embedded dashboard (React + Vite sites).** If the host is already Vite +
+React (with `react` + `react-dom` >=18 and `@vitejs/plugin-react` installed) and
+you want the dashboard inline at a dev-only `/admin` route, mount the Vite
+plugin. This is optional - `speakeasy admin` (5a) already covers the dashboard.
 
 ```js
 // vite.config.js
@@ -147,7 +160,7 @@ The plugin is `apply: 'serve'`, so it exists only in the dev server and never in
 a production build. That is the whole security model: **the operator keeps the
 admin secret by not deploying it.**
 
-**b) Or the CLI.** No UI, no dev plugin. JSON output by default (agent-friendly):
+**c) Or the CLI.** No UI, no dev plugin. JSON output by default (agent-friendly):
 
 ```bash
 speakeasy create --label "Acme - Spring" --items about,case-secret --duration 30

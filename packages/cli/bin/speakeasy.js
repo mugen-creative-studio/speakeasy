@@ -9,9 +9,11 @@
 //   speakeasy set-duration <slug> --duration 7      (--duration none = no expiry)
 //   speakeasy set-items <slug> --items a,b,c
 //   speakeasy lookup <slug>
+//   speakeasy admin                                 open the local dashboard
 //
 // Common flags: --config <path>, --pretty, --root <dir>
 
+import { spawn } from 'node:child_process'
 import {
   createContext,
   handleListItems,
@@ -21,6 +23,21 @@ import {
   handleLookup,
 } from '@speakeasy/server'
 import { loadConfig } from '../src/config.js'
+
+// Open a URL in the default browser, best-effort. A failure is silent - the
+// caller already printed the URL, so the user can open it by hand.
+function openBrowser(url) {
+  try {
+    const p = process.platform
+    const cmd = p === 'darwin' ? 'open' : p === 'win32' ? 'cmd' : 'xdg-open'
+    const args = p === 'win32' ? ['/c', 'start', '', url] : [url]
+    spawn(cmd, args, { stdio: 'ignore', detached: true })
+      .on('error', () => {})
+      .unref()
+  } catch {
+    // ignore - the URL is already on stdout
+  }
+}
 
 function parseArgs(argv) {
   const positional = []
@@ -169,6 +186,35 @@ async function main() {
       return out({ status, ...body }, pretty)
     }
 
+    case 'admin': {
+      // Framework-agnostic dashboard: a local server serving a plain-HTML admin
+      // and the same admin API the Vite plugin mounts. Works on any stack, no
+      // dev server required. Local-only (127.0.0.1); nothing is deployed.
+      const { startAdminServer } = await import('../src/admin-server.js')
+      const host = flags.host ? String(flags.host) : '127.0.0.1'
+      const wanted = flags.port ? Number(flags.port) : 4599
+      let started
+      try {
+        started = await startAdminServer(ctx, { host, port: wanted })
+      } catch (err) {
+        // Requested port busy: fall back to any free port so the command still
+        // works when 4599 is taken.
+        if (err && err.code === 'EADDRINUSE')
+          started = await startAdminServer(ctx, { host, port: 0 })
+        else throw err
+      }
+      process.stdout.write(
+        `speakeasy admin is running at ${started.url}\n` +
+          `Local-only and never deployed. Press Ctrl+C to stop.\n`,
+      )
+      openBrowser(started.url)
+      process.on('SIGINT', () => started.server.close(() => process.exit(0)))
+      // Resolve nothing: the listening server keeps the process alive until
+      // Ctrl+C. (Returning here would still keep Node up via the open handle,
+      // but staying pending makes the intent explicit.)
+      return new Promise(() => {})
+    }
+
     default:
       throw new Error(`Unknown command "${command}". Run "speakeasy help".`)
   }
@@ -190,6 +236,7 @@ Usage:
   speakeasy set-duration <slug> --duration <days|none>
   speakeasy set-items <slug> --items a,b,c
   speakeasy lookup <slug>                          what a visitor would receive
+  speakeasy admin [--port <n>]                     open the local dashboard (any stack, no dev server)
 
 Flags:
   --config <path>   config file (default: ./speakeasy.config.js)

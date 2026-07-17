@@ -81,15 +81,19 @@ plain-language guide for site owners is
 [docs/using-speakeasy.md](docs/using-speakeasy.md). You manage variants one of
 two ways:
 
-**Dashboard** - start your usual dev server and open the dev-only `/admin` route:
+**Dashboard** - run one command in your project and it opens a local,
+browser-based dashboard. Works on any stack (no Vite or React needed), local-only,
+never deployed:
 
 ```bash
-npm run dev            # your site's dev server
-# then open http://localhost:5173/admin
+npx speakeasy admin
 ```
 
-**CLI** - run it inside your project with `npx`, or install it globally for a
-bare `speakeasy` command anywhere:
+(React + Vite sites can instead embed the dashboard at a dev-only `/admin`
+route via the Vite plugin - see [INSTALL.md](INSTALL.md) step 5b.)
+
+**CLI** - the same actions from the terminal, JSON output so an agent can drive
+it too:
 
 ```bash
 npx speakeasy create --label "Acme - Spring" --items about,case-secret --duration 30

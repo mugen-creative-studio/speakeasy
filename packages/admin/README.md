@@ -19,9 +19,13 @@ export default () => <AdminApp />
 ```
 
 Requires `react` and `react-dom` 18 or newer already in your project (peer
-dependencies), and Node 20 or newer. If your site isn't React, use
-[`@speakeasy/cli`](https://www.npmjs.com/package/@speakeasy/cli) instead; it
-does the same job with no UI.
+dependencies), and Node 20 or newer.
+
+**Not a React site, or just want the dashboard without wiring anything?** Run
+`npx speakeasy admin` (from [`@speakeasy/cli`](https://www.npmjs.com/package/@speakeasy/cli)):
+it opens the same dashboard as a standalone local app on any stack, no Vite or
+React required. This React component is for embedding the dashboard inline in a
+Vite dev server. The CLI also offers the same actions with no UI at all.
 
 ```bash
 npm install @speakeasy/admin

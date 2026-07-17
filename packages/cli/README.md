@@ -16,7 +16,12 @@ speakeasy deactivate <slug>
 speakeasy set-duration <slug> --duration <days|none>
 speakeasy set-items <slug> --items a,b,c
 speakeasy lookup <slug>                         what a visitor would receive
+speakeasy admin [--port <n>]                    open the local dashboard (any stack, no dev server)
 ```
+
+Prefer clicking to typing? `speakeasy admin` starts a local, browser-based
+dashboard for the same create / curate / revoke actions. It works on any
+project (it does not need Vite or React) and is local-only, never deployed.
 
 Run it in a project that has a `speakeasy.config.js`:
 

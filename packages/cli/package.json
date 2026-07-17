@@ -17,12 +17,17 @@
   "bin": {
     "speakeasy": "bin/speakeasy.js"
   },
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  },
   "files": [
     "bin",
     "src",
+    "admin-ui",
     "NOTICE"
   ],
   "dependencies": {
+    "@speakeasy/admin": "0.1.2",
     "@speakeasy/core": "0.1.2",
     "@speakeasy/server": "0.1.2"
   },
