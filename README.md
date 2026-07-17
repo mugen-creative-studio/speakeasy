@@ -21,32 +21,6 @@ the CLI. A variant reveals a curated list of *items*, and you decide what an ite
 is: a case study, a document, a draft page, a photo set. The mechanism does not
 care what the content is.
 
-## See it in two minutes
-
-A [live demo](https://speakeasy-theta.vercel.app) is deployed the same way a
-real site would be. Compare three views of the same site:
-
-- [`/`](https://speakeasy-theta.vercel.app/) - the public site, nothing to see
-- [`/Vb7nK2pQ9mXr`](https://speakeasy-theta.vercel.app/Vb7nK2pQ9mXr) - a live
-  secret link revealing hidden case studies
-- [`/anything-else`](https://speakeasy-theta.vercel.app/anything-else) - the
-  404 every dead or guessed URL gets
-
-The fourth view, the dashboard where links are minted and revoked, never
-deploys to production, so the live demo cannot show it. To see it, run the demo
-locally (you need [Node 20+](https://nodejs.org) and `git`; the rest is
-copy-paste):
-
-```bash
-git clone https://github.com/mugen-creative-studio/speakeasy.git
-cd speakeasy && npm install
-npm run dev --workspace examples/demo
-```
-
-Then open `http://localhost:5173/admin`:
-
-![The admin dashboard: a label field, expiry options, toggles for each content item, and a Create link button](docs/admin-dashboard.png)
-
 ## Can you use this?
 
 - ✅ **Yes** if your site is a coded site in a repo that deploys to Vercel,
@@ -88,8 +62,9 @@ and revoking links is point-and-click, covered in the plain-language
 speakeasy is not a standalone app you launch; it wires into your own site as a
 one-time integration. [INSTALL.md](INSTALL.md) is the complete step-by-step
 guide, written for a coding agent (or web developer) to follow against the
-runnable reference in [`examples/demo`](examples/demo). Point your agent at it,
-or hand it to whoever maintains your site.
+runnable reference in [`examples/demo`](examples/demo) (from a clone of this
+repo: `npm run dev --workspace examples/demo`). Point your agent at it, or hand
+it to whoever maintains your site.
 
 The short version: install the packages you need,
 
@@ -113,6 +88,8 @@ two ways:
 npm run dev            # your site's dev server
 # then open http://localhost:5173/admin
 ```
+
+![The admin dashboard: a label field, expiry options, toggles for each content item, and a Create link button](docs/admin-dashboard.png)
 
 **CLI** - run it inside your project with `npx`, or install it globally for a
 bare `speakeasy` command anywhere:
