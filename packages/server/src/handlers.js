@@ -120,7 +120,9 @@ export async function handlePatch(ctx, slug, body) {
 // expired all return the same 404 so no one can detect a slug ever existed.
 export async function handleLookup(ctx, slug, now = Date.now()) {
   const manifest = await ctx.storage.read()
-  const entry = slug ? manifest[slug] : null
+  // Own-key lookup only, so a slug like `__proto__` or `constructor` can't
+  // resolve to an inherited member and must 404 like any other junk slug.
+  const entry = slug && Object.hasOwn(manifest, slug) ? manifest[slug] : null
   if (!isServable(entry, now)) {
     return { status: 404, body: { error: 'not_found' } }
   }

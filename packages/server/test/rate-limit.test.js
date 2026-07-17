@@ -35,3 +35,15 @@ test('clientKey prefers the first x-forwarded-for entry, else the socket', () =>
   assert.equal(clientKey({ socket: { remoteAddress: '127.0.0.1' } }), '127.0.0.1')
   assert.equal(clientKey({}), 'unknown')
 })
+
+test('clientKey with trustProxy:false ignores a spoofable x-forwarded-for', () => {
+  const req = {
+    headers: { 'x-forwarded-for': '1.2.3.4' }, // attacker-forged
+    socket: { remoteAddress: '10.0.0.9' },
+  }
+  // Trusting the proxy (default) keys on the forgeable header...
+  assert.equal(clientKey(req), '1.2.3.4')
+  // ...but a raw host that can't trust it keys on the real socket, so rotating
+  // the header no longer mints a fresh bucket.
+  assert.equal(clientKey(req, { trustProxy: false }), '10.0.0.9')
+})

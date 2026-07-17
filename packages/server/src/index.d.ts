@@ -136,5 +136,9 @@ export declare function createRateLimiter(opts?: {
 }): {
   hit(key: string, now?: number): { allowed: boolean; remaining: number; retryAfterMs: number }
 }
-/** Best-effort client id from a request. Note: x-forwarded-for is spoofable. */
-export declare function clientKey(req: any): string
+/**
+ * Best-effort client id from a request. Note: x-forwarded-for is spoofable;
+ * pass `{ trustProxy: false }` on a raw host to key on the socket address only.
+ * Defaults to trusting the proxy header (correct for Vercel/Netlify/Cloudflare).
+ */
+export declare function clientKey(req: any, opts?: { trustProxy?: boolean }): string

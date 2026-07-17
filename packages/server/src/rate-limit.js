@@ -73,12 +73,18 @@ export function createRateLimiter({
 // SECURITY: x-forwarded-for is set by the caller and is trivially SPOOFABLE
 // unless a trusted proxy in front of you overwrites it (Vercel and Cloudflare
 // do). If clients can reach the function directly, an attacker can forge this
-// header to rotate "IPs" and slip past the rate limit. On Cloudflare prefer the
-// platform's `cf-connecting-ip`; on a raw Node host with no trusted proxy, key
-// on the socket address instead. Treat this throttle as best-effort shedding,
-// never as a hard guarantee (see the module header).
-export function clientKey(req) {
+// header to rotate "IPs" and slip past the rate limit. Pass `trustProxy: false`
+// on a raw Node host with no trusted proxy to key on the socket address only and
+// ignore the header. On Cloudflare prefer the platform's `cf-connecting-ip`.
+// Treat this throttle as best-effort shedding, never a hard guarantee (see the
+// module header).
+//
+// `trustProxy` defaults to true, which keeps the header-first behavior every
+// managed host (Vercel, Netlify, Cloudflare Pages) relies on.
+export function clientKey(req, { trustProxy = true } = {}) {
+  const socket = req?.socket?.remoteAddress || req?.connection?.remoteAddress || 'unknown'
+  if (!trustProxy) return socket
   const xff = req?.headers?.['x-forwarded-for']
   if (xff) return String(xff).split(',')[0].trim()
-  return req?.socket?.remoteAddress || req?.connection?.remoteAddress || 'unknown'
+  return socket
 }

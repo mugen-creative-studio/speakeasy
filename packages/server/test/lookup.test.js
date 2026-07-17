@@ -72,6 +72,15 @@ test('orphan ids (content removed since minting) are dropped from a live respons
   assert.deepEqual(body.ids, ['pub-1', 'sec-1'], 'unknown "ghost" id is dropped, order preserved')
 })
 
+test('a prototype key like __proto__ or constructor 404s, never an inherited hit', async () => {
+  const ctx = ctxWith({ good: { items: ['sec-1'], active: true, expiresAt: future } })
+  for (const slug of ['__proto__', 'constructor', 'hasOwnProperty', 'toString']) {
+    const { status, body } = await handleLookup(ctx, slug, NOW)
+    assert.equal(status, 404, `${slug} must not resolve to an inherited member`)
+    assert.deepEqual(body, { error: 'not_found' })
+  }
+})
+
 test('an empty slug is treated as not found, never an error', async () => {
   const ctx = ctxWith({ good: { items: ['sec-1'], active: true, expiresAt: future } })
   const { status, body } = await handleLookup(ctx, '', NOW)

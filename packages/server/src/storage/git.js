@@ -27,7 +27,7 @@ export function createGitStorage({
     const tmp = abs + '.tmp'
     writeFileSync(tmp, JSON.stringify(manifest, null, 2) + '\n')
     renameSync(tmp, abs)
-    await run('git', ['add', rel], { cwd: root })
+    await run('git', ['add', '--', rel], { cwd: root })
     // Skip the commit when nothing actually changed (e.g. re-saving an
     // identical set). `git diff --cached --quiet` exits 0 when nothing is
     // staged, non-zero (throws) when there is - otherwise `git commit` would

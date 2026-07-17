@@ -29,6 +29,13 @@ export default async function handler(req, res) {
     return res.status(429).json({ error: 'rate_limited' })
   }
   const slug = new URL(req.url, 'http://localhost').searchParams.get('slug') || ''
-  const { status, body } = await handleLookup(ctx, slug)
-  res.status(status).json(body)
+  // Any failure (storage read, content load) must return the SAME 404 a dead
+  // slug gets - never a 500 with a stack, which would break the
+  // indistinguishable-404 model and leak that something went wrong.
+  try {
+    const { status, body } = await handleLookup(ctx, slug)
+    res.status(status).json(body)
+  } catch {
+    res.status(404).json({ error: 'not_found' })
+  }
 }
