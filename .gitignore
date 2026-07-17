@@ -9,7 +9,6 @@ dist/
 
 # Local screenshot/scratch output
 *.png
-!docs/admin-dashboard.png
 .playwright-mcp/
 
 # Secrets & credentials

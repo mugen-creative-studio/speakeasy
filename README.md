@@ -62,9 +62,8 @@ and revoking links is point-and-click, covered in the plain-language
 speakeasy is not a standalone app you launch; it wires into your own site as a
 one-time integration. [INSTALL.md](INSTALL.md) is the complete step-by-step
 guide, written for a coding agent (or web developer) to follow against the
-runnable reference in [`examples/demo`](examples/demo) (from a clone of this
-repo: `npm run dev --workspace examples/demo`). Point your agent at it, or hand
-it to whoever maintains your site.
+runnable reference in [`examples/demo`](examples/demo). Point your agent at it,
+or hand it to whoever maintains your site.
 
 The short version: install the packages you need,
 
@@ -88,8 +87,6 @@ two ways:
 npm run dev            # your site's dev server
 # then open http://localhost:5173/admin
 ```
-
-![The admin dashboard: a label field, expiry options, toggles for each content item, and a Create link button](docs/admin-dashboard.png)
 
 **CLI** - run it inside your project with `npx`, or install it globally for a
 bare `speakeasy` command anywhere:
