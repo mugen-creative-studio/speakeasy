@@ -1,7 +1,7 @@
 {
   "Vb7nK2pQ9mXr": {
     "label": "Vercel demo - live",
-    "items": ["case-nightingale", "case-alpha", "case-beta"],
+    "items": ["case-nightingale", "case-alpha", "case-beta", "case-gamma"],
     "createdAt": "2026-06-17T00:00:00.000Z",
     "expiresAt": null,
     "active": true
