@@ -23,8 +23,19 @@ care what the content is.
 
 ## See it in two minutes
 
-You need [Node 20+](https://nodejs.org) and `git` installed; the rest is
-copy-paste:
+A [live demo](https://speakeasy-theta.vercel.app) is deployed the same way a
+real site would be. Compare three views of the same site:
+
+- [`/`](https://speakeasy-theta.vercel.app/) - the public site, nothing to see
+- [`/Vb7nK2pQ9mXr`](https://speakeasy-theta.vercel.app/Vb7nK2pQ9mXr) - a live
+  secret link revealing hidden case studies
+- [`/anything-else`](https://speakeasy-theta.vercel.app/anything-else) - the
+  404 every dead or guessed URL gets
+
+The fourth view, the dashboard where links are minted and revoked, never
+deploys to production, so the live demo cannot show it. To see it, run the demo
+locally (you need [Node 20+](https://nodejs.org) and `git`; the rest is
+copy-paste):
 
 ```bash
 git clone https://github.com/mugen-creative-studio/speakeasy.git
@@ -32,12 +43,9 @@ cd speakeasy && npm install
 npm run dev --workspace examples/demo
 ```
 
-Then open `http://localhost:5173` and compare three views of the same site:
+Then open `http://localhost:5173/admin`:
 
-- `/` - the public site, nothing to see
-- `/Vb7nK2pQ9mXr` - a live secret link revealing hidden case studies
-- `/anything-else` - the 404 every dead or guessed URL gets
-- `/admin` - the dashboard where links are minted and revoked
+![The admin dashboard: a label field, expiry options, toggles for each content item, and a Create link button](docs/admin-dashboard.png)
 
 ## Can you use this?
 
@@ -75,6 +83,50 @@ and revoking links is point-and-click, covered in the plain-language
 > exposes every slug and defeats the model. See [SECURITY.md](SECURITY.md) and
 > [INSTALL.md](INSTALL.md).
 
+## Setting it up
+
+speakeasy is not a standalone app you launch; it wires into your own site as a
+one-time integration. [INSTALL.md](INSTALL.md) is the complete step-by-step
+guide, written for a coding agent (or web developer) to follow against the
+runnable reference in [`examples/demo`](examples/demo). Point your agent at it,
+or hand it to whoever maintains your site.
+
+The short version: install the packages you need,
+
+```bash
+npm install @speakeasy/core @speakeasy/server @speakeasy/cli @speakeasy/admin
+```
+
+then follow INSTALL.md to add a config file, a content source, one deployed
+lookup endpoint, and a host rewrite. Everything else stays on your machine.
+
+## Day-to-day use
+
+Once installed, creating, sharing, and revoking links needs no coding; the
+plain-language guide for site owners is
+[docs/using-speakeasy.md](docs/using-speakeasy.md). You manage variants one of
+two ways:
+
+**Dashboard** - start your usual dev server and open the dev-only `/admin` route:
+
+```bash
+npm run dev            # your site's dev server
+# then open http://localhost:5173/admin
+```
+
+**CLI** - run it inside your project with `npx`, or install it globally for a
+bare `speakeasy` command anywhere:
+
+```bash
+npx speakeasy create --label "Acme - Spring" --items about,case-secret --duration 30
+npx speakeasy list
+npx speakeasy deactivate Xa9f2Qb7Lm3k
+# or: npm install -g @speakeasy/cli   ->   then just `speakeasy list`
+```
+
+The visitor-facing lookup (`/<slug>` to the curated content, or an identical
+404) needs no launching: it runs on every request to your deployed site.
+
 ## Packages
 
 speakeasy is four small packages under the `@speakeasy` scope. Install only the
@@ -101,91 +153,11 @@ both) for how you want to manage variants.
    endpoint. Per-platform recipes live in
    [`docs/host-rewrites.md`](docs/host-rewrites.md).
 
-## Quick start
+## Contributing
 
-Install the packages you need (`core` and `server` are the base; add `cli` or
-`admin` for how you manage variants):
-
-```bash
-npm install @speakeasy/core @speakeasy/server @speakeasy/cli @speakeasy/admin
-```
-
-> **Setting it up with an agent?** Point it at [INSTALL.md](INSTALL.md), the full
-> host-by-host guide written against [`examples/demo`](examples/demo).
-
-Then in your app:
-
-```js
-// speakeasy.config.js (see speakeasy.config.example.js)
-export default {
-  prodUrl: 'https://yoursite.com',
-  manifestPath: 'api/_variants.json',
-  lookupPath: '/api/variant',
-  content: './content.js',
-  storage: 'git',
-}
-```
-
-```js
-// vite.config.js
-import { speakeasyAdmin } from '@speakeasy/server/vite'
-import config from './speakeasy.config.js'
-export default defineConfig({ plugins: [react(), speakeasyAdmin({ config })] })
-```
-
-```jsx
-// wherever you mount a dev-only /admin route
-import { AdminApp } from '@speakeasy/admin'
-import '@speakeasy/admin/admin.css'
-export default () => <AdminApp />
-```
-
-```js
-// api/variant.js, the one production endpoint
-import { createContext, handleLookup } from '@speakeasy/server'
-import config from '../speakeasy.config.js'
-const ctx = createContext({ ...config, storage: 'fs' }) // read-only on the server
-export default async function (req, res) {
-  const { status, body } = await handleLookup(ctx, req.query.slug)
-  res.status(status).json(body)
-}
-```
-
-## Running it
-
-speakeasy is not a standalone app you launch; `core` and `server` run as part of
-your own site. Day-to-day use (create, share, revoke) needs no coding; the
-plain-language guide for site owners is
-[docs/using-speakeasy.md](docs/using-speakeasy.md). You manage variants one of
-two ways:
-
-**Dashboard** - start your usual dev server and open the dev-only `/admin` route:
-
-```bash
-npm run dev            # your site's dev server
-# then open http://localhost:5173/admin
-```
-
-**CLI** - run it inside your project with `npx`, or install it globally for a
-bare `speakeasy` command anywhere:
-
-```bash
-npx speakeasy create --label "Acme - Spring" --items about,case-secret --duration 30
-npx speakeasy list
-npx speakeasy deactivate Xa9f2Qb7Lm3k
-# or: npm install -g @speakeasy/cli   ->   then just `speakeasy list`
-```
-
-The visitor-facing lookup (`/<slug>` to the curated content, or an identical
-404) needs no launching: it runs on every request to your deployed site.
-
-To watch all three together, run the bundled demo (from a clone of this repo,
-not an npm install):
-
-```bash
-npm run dev --workspace examples/demo
-# public site at /, dashboard at /admin, a variant at /<slug>
-```
+Issues and PRs are welcome; see [CONTRIBUTING.md](CONTRIBUTING.md) for how to
+run the tests and what to expect. Release history lives in
+[CHANGELOG.md](CHANGELOG.md).
 
 ## License
 
