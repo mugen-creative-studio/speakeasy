@@ -17,16 +17,15 @@ nothing. When you deactivate a link (or it expires), it becomes that same
 ## Open the dashboard
 
 The dashboard runs only on your own computer; it is never part of your public
-site. Whoever installed speakeasy should tell you the exact command for your
-site, but for most setups it is:
+site. Inside your site's folder, run:
 
 ```bash
-npm run dev
+npx speakeasy admin
 ```
 
-run inside your site's folder, then open `http://localhost:5173/admin` in
-your browser. Keep the terminal window open while you work; closing it just
-closes the dashboard, never your site.
+It opens the dashboard in your browser automatically. Keep the terminal window
+open while you work; closing it (or pressing Ctrl+C) just closes the dashboard,
+never your site. This works on any site, whatever it is built with.
 
 ## Create and share a link
 
@@ -77,8 +76,8 @@ npx speakeasy deactivate Xa9f2Qb7Lm3k     # kill a link
 
 ## When something looks wrong
 
-- **The dashboard won't open:** the dev command probably isn't running.
-  Start it again and keep the terminal window open.
+- **The dashboard won't open:** the `npx speakeasy admin` command probably
+  isn't running. Start it again and keep the terminal window open.
 - **A new link shows "not found":** the change may still be publishing. The
   dashboard reports when it is live; give it a minute.
 - **You need to change what a link reveals:** edit the variant in the

@@ -44,9 +44,10 @@ and revoking links is point-and-click, covered in the plain-language
 
 ## Why it's safe to deploy
 
-- **No admin in production.** The admin API runs only in your dev server (a Vite
-  plugin gated to `apply: 'serve'`) or through the CLI on your own machine. The
-  deployed site exposes a single read-only lookup endpoint, nothing more.
+- **No admin in production.** The admin runs only on your own machine - the
+  standalone `speakeasy admin` dashboard or the CLI (and, optionally, a dev-only
+  Vite plugin gated to `apply: 'serve'`). The deployed site exposes a single
+  read-only lookup endpoint, nothing more.
 - **Private data never ships to the client** until a live slug asks for it. The
   public bundle holds no trace of it.
 - **One indistinguishable 404.** Unknown, deactivated, and expired slugs all
@@ -68,7 +69,7 @@ or hand it to whoever maintains your site.
 The short version: install the packages you need,
 
 ```bash
-npm install @speakeasy/core @speakeasy/server @speakeasy/cli @speakeasy/admin
+npm install @speakeasy/core @speakeasy/server @speakeasy/cli
 ```
 
 then follow INSTALL.md to add a config file, a content source, one deployed
@@ -81,15 +82,19 @@ plain-language guide for site owners is
 [docs/using-speakeasy.md](docs/using-speakeasy.md). You manage variants one of
 two ways:
 
-**Dashboard** - start your usual dev server and open the dev-only `/admin` route:
+**Dashboard** - run one command in your project and it opens a local,
+browser-based dashboard. Works on any stack (no Vite or React needed), local-only,
+never deployed:
 
 ```bash
-npm run dev            # your site's dev server
-# then open http://localhost:5173/admin
+npx speakeasy admin
 ```
 
-**CLI** - run it inside your project with `npx`, or install it globally for a
-bare `speakeasy` command anywhere:
+(React + Vite sites can optionally expose the same admin API inside their own
+dev server via the Vite plugin - see [INSTALL.md](INSTALL.md) step 5b.)
+
+**CLI** - the same actions from the terminal, JSON output so an agent can drive
+it too:
 
 ```bash
 npx speakeasy create --label "Acme - Spring" --items about,case-secret --duration 30
@@ -103,16 +108,15 @@ The visitor-facing lookup (`/<slug>` to the curated content, or an identical
 
 ## Packages
 
-speakeasy is four small packages under the `@speakeasy` scope. Install only the
-ones you need: `core` and `server` are the base, then pick `cli` or `admin` (or
-both) for how you want to manage variants.
+speakeasy is three small packages under the `@speakeasy` scope. Install only the
+ones you need: `core` and `server` are the base, and `cli` gives you both the
+terminal commands and the standalone browser dashboard.
 
 | Package | What it does | You need it |
 | --- | --- | --- |
 | [`@speakeasy/core`](packages/core) | The engine, with zero dependencies. It generates the unguessable slugs, defines the *manifest* (the record of which slug reveals which items and when it expires), and decides whether a given slug is live, expired, or deactivated. | Always |
 | [`@speakeasy/server`](packages/server) | The part that answers a visitor. Given a slug it returns the curated items, or the identical 404 for anything unknown, expired, or deactivated. You plug it into your app (as Express/connect middleware or a Vite dev plugin) and point it at where your content and manifest live. | Always |
-| [`@speakeasy/cli`](packages/cli) | A terminal command (`speakeasy items`, `create`, `list`, `deactivate`, `set-items`, `set-duration`, `lookup`) for minting, re-curating, and revoking variants without a UI. Outputs JSON, so a coding agent can drive it too. | If you manage variants from the command line |
-| [`@speakeasy/admin`](packages/admin) | A small React dashboard for the same create / curate / revoke actions, for when you'd rather click than type. Runs only in your dev environment; it is never deployed to production. Requires `react` + `react-dom` 18+ already in your project (peer dependency); if your site isn't React, use the CLI instead. | If you want the visual dashboard |
+| [`@speakeasy/cli`](packages/cli) | The `speakeasy` command: terminal actions (`items`, `create`, `list`, `deactivate`, `set-items`, `set-duration`, `lookup`) that output JSON so a coding agent can drive them, plus `speakeasy admin` - a standalone, browser-based dashboard for the same create / curate / revoke actions when you'd rather click than type. The dashboard needs no Vite or React and runs only on your machine, never deployed. | Always (to manage variants) |
 
 ## The four seams that make it agnostic
 

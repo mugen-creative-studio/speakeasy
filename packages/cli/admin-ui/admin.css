@@ -1,4 +1,5 @@
-/* Self-contained styling for @speakeasy/admin, in the Geist (Vercel) idiom:
+/* Self-contained styling for the speakeasy admin dashboard, in the Geist
+ * (Vercel) idiom:
  * Geist Sans for UI, Geist Mono for IDs/slugs/metrics, a grayscale-driven
  * palette with black as the primary action, crisp 1px borders, 6px radii.
  * All tokens live on .sk-shell so the dashboard carries its own look.
