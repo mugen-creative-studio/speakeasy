@@ -15,14 +15,17 @@ import { dirname, join } from 'node:path'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 
-// Root plus every publishable workspace. The demo is private and intentionally
-// excluded - it never gets a version.
+const read = (rel) => JSON.parse(readFileSync(join(root, rel), 'utf8'))
+
+// Root plus every publishable workspace, derived from the `workspaces` field so
+// adding or removing a package can never desync this list against reality. The
+// demo (and any other private workspace) is intentionally excluded - it never
+// gets a version.
 const manifests = [
   'package.json',
-  'packages/core/package.json',
-  'packages/server/package.json',
-  'packages/cli/package.json',
-  'packages/admin/package.json',
+  ...read('package.json')
+    .workspaces.map((w) => join(w, 'package.json'))
+    .filter((rel) => !read(rel).private),
 ]
 
 const arg = process.argv[2]
@@ -30,8 +33,6 @@ if (!arg) {
   console.error('usage: node scripts/bump.mjs <major|minor|patch|x.y.z>')
   process.exit(1)
 }
-
-const read = (rel) => JSON.parse(readFileSync(join(root, rel), 'utf8'))
 
 function nextVersion(current, bump) {
   if (/^\d+\.\d+\.\d+$/.test(bump)) return bump

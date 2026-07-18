@@ -349,6 +349,7 @@ function makeVariantRow(variant, items, onChanged) {
   let editing = null
   let durationDays = DEFAULT_DURATION_DAYS
   let orderedIds = [...variant.items]
+  let busy = false
 
   const editWrap = el('div')
   const msgWrap = el('div')
@@ -445,6 +446,14 @@ function makeVariantRow(variant, items, onChanged) {
   }
 
   async function patch(body) {
+    // Guard against overlapping mutations. A double-click, or a second action
+    // fired while one is still in flight, would send concurrent PATCHes into
+    // read-modify-persist storage (last-writer-wins, or a duplicate git push).
+    // Ignore re-entrant calls and disable this row's buttons until it settles.
+    if (busy) return
+    busy = true
+    const buttons = [...actions.querySelectorAll('button'), ...editWrap.querySelectorAll('button')]
+    for (const b of buttons) b.disabled = true
     msgWrap.replaceChildren()
     try {
       const result = await sendJSON(
@@ -466,6 +475,9 @@ function makeVariantRow(variant, items, onChanged) {
       if (onChanged) onChanged()
     } catch (err) {
       showMsg('err', 'Failed: ' + String(err))
+    } finally {
+      busy = false
+      for (const b of buttons) b.disabled = false
     }
   }
 
