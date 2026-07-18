@@ -10,8 +10,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `speakeasy admin`: a standalone, browser-based dashboard that runs on any
   project with one command (no Vite or React, no dev server). It serves a
   dependency-free HTML dashboard and mounts the admin API on a local-only port
-  (`127.0.0.1`); nothing is deployed. The embedded Vite-plugin `/admin` route
-  stays for React sites that want it inline.
+  (`127.0.0.1`); nothing is deployed. This is now the single dashboard for every
+  stack.
 - `docs/using-speakeasy.md`: a plain-language day-to-day guide for site owners
   (create, share, revoke; no coding), linked from the README and handed off at
   the end of INSTALL.md.
@@ -25,10 +25,20 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - README reorganized around the reader's path (can-you-use-it, why-it's-safe,
   setup, daily use); dropped the standalone demo walkthrough.
 
+### Removed
+- The `@speakeasy/admin` React dashboard package. Its job is now covered by the
+  standalone `speakeasy admin` dashboard in `@speakeasy/cli`, which needs no
+  React and works on any stack; sites that embedded `<AdminApp>` should run
+  `npx speakeasy admin` instead. The admin API itself (`createAdminMiddleware`
+  and the `@speakeasy/server/vite` plugin) is unchanged.
+
 ### Fixed
 - README: the CLI command list now includes `speakeasy items`.
 
 ### Security
+- `speakeasy admin` refuses to bind to any non-loopback host and fails closed
+  (only `127.0.0.1`, `::1`, `localhost`, and `127.0.0.0/8` are allowed), so the
+  unauthenticated admin API can never be exposed on the network.
 - The public lookup returns the identical 404 (never a 500) when the storage or
   content source throws, preserving the indistinguishable-404 model on error.
 - Manifest lookups are own-key only (`Object.hasOwn`), so a slug such as

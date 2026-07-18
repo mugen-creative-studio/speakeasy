@@ -27,7 +27,6 @@
     "NOTICE"
   ],
   "dependencies": {
-    "@speakeasy/admin": "0.1.2",
     "@speakeasy/core": "0.1.2",
     "@speakeasy/server": "0.1.2"
   },

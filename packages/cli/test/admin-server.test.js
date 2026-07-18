@@ -35,7 +35,7 @@ test('serves the dashboard shell and its static assets', async () => {
     assert.equal(js.status, 200)
     assert.match(js.headers.get('content-type'), /javascript/)
 
-    // admin.css is resolved from @speakeasy/admin (shared source of truth).
+    // admin.css ships with the CLI (packages/cli/admin-ui).
     const css = await fetch(url + '/admin.css')
     assert.equal(css.status, 200)
     assert.match(css.headers.get('content-type'), /text\/css/)
@@ -53,6 +53,25 @@ test('mounts the admin API on the same port', async () => {
       ['a'],
     )
   })
+})
+
+test('refuses to bind to a non-loopback host (fails closed)', async () => {
+  // The admin API has no auth, so a network-reachable bind must be rejected
+  // before any listener is opened.
+  for (const host of ['0.0.0.0', '::', '192.168.1.10', 'example.com']) {
+    await assert.rejects(
+      () => startAdminServer(fakeCtx(), { host, port: 0 }),
+      /loopback/,
+      `expected host "${host}" to be refused`,
+    )
+  }
+})
+
+test('allows loopback hosts', async () => {
+  for (const host of ['127.0.0.1', 'localhost', '::1']) {
+    const { server } = await startAdminServer(fakeCtx(), { host, port: 0 })
+    await new Promise((r) => server.close(r))
+  }
 })
 
 test('static serving cannot escape the asset directory', async () => {

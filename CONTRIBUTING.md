@@ -20,7 +20,7 @@ Requires Node 20 or newer (the code uses JSON import attributes and the built-in
 ```bash
 git clone <your fork>
 cd speakeasy
-npm install        # installs all workspaces: core, server, cli, admin, demo
+npm install        # installs all workspaces: core, server, cli, demo
 npm test           # core unit tests + server end-to-end smoke test
 ```
 
@@ -28,7 +28,7 @@ Run the reference demo on localhost:
 
 ```bash
 npm run dev --workspace examples/demo
-# public site at /, the dev-only dashboard at /admin, a variant at /<slug>
+# public site at /, a variant at /<slug>; manage variants with `npx speakeasy admin`
 ```
 
 ## How the project is laid out
@@ -39,8 +39,7 @@ It is an npm-workspaces monorepo. Each package does one job:
 | --- | --- |
 | `packages/core` | Pure logic: slug generation, manifest schema, lifecycle rules. **Zero dependencies.** |
 | `packages/server` | Request handlers + pluggable adapters (storage, deploy verifier, content source, rate limiter). Framework-agnostic. |
-| `packages/cli` | The `speakeasy` command. |
-| `packages/admin` | The React dashboard (dev/operator-only). |
+| `packages/cli` | The `speakeasy` command, and `speakeasy admin` (the standalone browser dashboard). |
 | `examples/demo` | The runnable reference wiring that INSTALL.md points at. |
 
 The design is built around four seams (content source, storage adapter, deploy
@@ -51,9 +50,10 @@ a new concept. See the README for the seam overview.
 
 - **`packages/core` stays dependency-free** and isomorphic. Anything needing
   Node APIs (filesystem, git, crypto-for-IO) belongs in `packages/server`.
-- **The admin never reaches production.** Keep it behind the dev-only plugin and
-  the `import.meta.env.DEV` gate. The deployed site exposes only the read-only
-  lookup endpoint.
+- **The admin never reaches production.** It runs only on the operator's machine
+  - the `speakeasy admin` server (bound to loopback) or the dev-only Vite plugin
+  (`apply: 'serve'`). The deployed site exposes only the read-only lookup
+  endpoint.
 - **Preserve the indistinguishable 404.** Any change to lookup or lifecycle must
   keep unknown, deactivated, and expired slugs returning the same response.
 - **Do not weaken slug entropy.** Slugs must come from a cryptographic random

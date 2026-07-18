@@ -16,8 +16,8 @@ done.
 You rarely use this package alone. Pair it with
 [`@speakeasy/server`](https://www.npmjs.com/package/@speakeasy/server), which
 answers visitor lookups, and manage variants with
-[`@speakeasy/cli`](https://www.npmjs.com/package/@speakeasy/cli) or the
-[`@speakeasy/admin`](https://www.npmjs.com/package/@speakeasy/admin) dashboard.
+[`@speakeasy/cli`](https://www.npmjs.com/package/@speakeasy/cli) - terminal
+commands plus the standalone `speakeasy admin` browser dashboard.
 
 ```bash
 npm install @speakeasy/core @speakeasy/server

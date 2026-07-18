@@ -44,14 +44,13 @@ Requires **Node 20 or newer** on the machine that runs the CLI or the dev
 dashboard (every package sets `engines.node >= 20`).
 
 ```bash
-npm install @speakeasy/core @speakeasy/server @speakeasy/cli @speakeasy/admin
+npm install @speakeasy/core @speakeasy/server @speakeasy/cli
 ```
 
-`@speakeasy/admin` holds the dashboard UI. The standalone `speakeasy admin`
-command (step 5a) uses it and needs nothing extra (`@speakeasy/cli` pulls it in).
-Only the embedded Vite-plugin dashboard (step 5b) requires `react` and
-`react-dom` (>=18) as peer dependencies in your project. The CLI commands (step
-5c) need neither React nor a dev plugin.
+`@speakeasy/cli` ships both the terminal commands and the standalone `speakeasy
+admin` dashboard (step 5a), and needs nothing extra - no React, no dev server.
+Only the optional Vite plugin (step 5b) touches a React/Vite project. The CLI
+commands (step 5c) need neither React nor a dev plugin.
 
 ## 2. Config - `speakeasy.config.js`
 
@@ -137,23 +136,18 @@ local-only and never deployed - the same security model as the plugin below.
 This is what [`docs/using-speakeasy.md`](docs/using-speakeasy.md) tells the owner
 to run, so hand them that guide and you are done.
 
-**b) Embedded dashboard (React + Vite sites).** If the host is already Vite +
-React (with `react` + `react-dom` >=18 and `@vitejs/plugin-react` installed) and
-you want the dashboard inline at a dev-only `/admin` route, mount the Vite
-plugin. This is optional - `speakeasy admin` (5a) already covers the dashboard.
+**b) The admin API in your own dev server (advanced, optional).** `speakeasy
+admin` (5a) is the dashboard, and covers this for every stack. If you would
+rather run the admin API *inside* an existing Vite + React dev server - to script
+against it, or to build your own UI on top of it - mount the Vite plugin. It
+exposes the same admin API under `/__speakeasy` that the standalone dashboard
+talks to.
 
 ```js
 // vite.config.js
 import { speakeasyAdmin } from '@speakeasy/server/vite'
 import config from './speakeasy.config.js'
 export default defineConfig({ plugins: [react(), speakeasyAdmin({ config })] })
-```
-
-```jsx
-// a dev-only /admin route
-import { AdminApp } from '@speakeasy/admin'
-import '@speakeasy/admin/admin.css'
-export default () => <AdminApp />
 ```
 
 The plugin is `apply: 'serve'`, so it exists only in the dev server and never in

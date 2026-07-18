@@ -1,8 +1,6 @@
-// The standalone admin dashboard, in plain browser JavaScript - no React, no
-// build step. It talks to the same admin API the React dashboard uses (the one
-// `speakeasy admin` mounts under /__speakeasy), so behavior matches; this is
-// just a dependency-free rendering of it. Styling is shared: it reuses the same
-// .sk-* classes from @speakeasy/admin's admin.css.
+// The admin dashboard, in plain browser JavaScript - no React, no build step.
+// It talks to the admin API `speakeasy admin` mounts under /__speakeasy. Styling
+// is the .sk-* classes in admin.css, which ships alongside this file.
 
 const API = '/__speakeasy'
 const DEFAULT_DURATION_DAYS = 30

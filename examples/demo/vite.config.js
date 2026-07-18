@@ -45,7 +45,10 @@ function speakeasyLookup({ config }) {
 export default defineConfig({
   plugins: [
     react(),
-    // Dev-only admin API (the dashboard talks to this). Never in a prod build.
+    // The admin API, mounted in the dev server. The dashboard itself now runs
+    // out-of-process (`npx speakeasy admin`); this plugin stays as the optional
+    // way to expose the same admin API inside a React/Vite dev server. Dev-only
+    // (apply: 'serve'), so it never exists in a production build.
     speakeasyAdmin({ config }),
     // The public read-only lookup endpoint.
     speakeasyLookup({ config }),

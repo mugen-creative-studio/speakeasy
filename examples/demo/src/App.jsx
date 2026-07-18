@@ -1,36 +1,14 @@
-import { useEffect, useState, lazy, Suspense } from 'react'
+import { useEffect, useState } from 'react'
 import { PUBLIC_CASES } from './publicCatalog.js'
 
-// The admin dashboard is lazy-loaded and gated behind import.meta.env.DEV, so
-// its code AND styles are tree-shaken out of the production bundle entirely -
-// mirroring the real model where the admin only ever runs on the operator's
-// machine. In a prod build AdminRoute is null and /admin falls through to the
-// same indistinguishable 404 as any junk path.
-const AdminRoute = import.meta.env.DEV
-  ? lazy(() =>
-      Promise.all([import('@speakeasy/admin'), import('@speakeasy/admin/admin.css')]).then(
-        ([mod]) => ({ default: mod.AdminApp }),
-      ),
-    )
-  : null
-
-// A deliberately tiny router. Three destinations:
+// A deliberately tiny router. Two destinations:
 //   /        → the public site (everyone sees this; public cases only)
-//   /admin   → the speakeasy dashboard (dev only; mint & curate variants)
 //   /<slug>  → a variant: resolve the slug, render its curated set, or a 404
 //              that is byte-identical to any junk URL.
+// The admin is not a route here: it runs out-of-process via `npx speakeasy
+// admin` (its own local-only server), never inside the deployed site.
 export default function App() {
   const path = window.location.pathname.replace(/\/+$/, '') || '/'
-  if (path === '/admin' && AdminRoute) {
-    return (
-      <Suspense fallback={null}>
-        <AdminRoute
-          title="Portfolio variants"
-          subtitle="Mint a private link, choose what it reveals, and revoke it when the conversation's over."
-        />
-      </Suspense>
-    )
-  }
   if (path === '/') return <Site cases={PUBLIC_CASES} />
   return <Variant slug={decodeURIComponent(path.slice(1))} />
 }
@@ -59,12 +37,8 @@ function Site({ cases }) {
       </ul>
       <footer className="site-footer">
         <span>© Atelier</span>
-        {/* Demo affordance, dev only - a real deploy never advertises (or ships) the dashboard. */}
-        {import.meta.env.DEV && (
-          <a className="demo-link" href="/admin">
-            demo: open the dashboard →
-          </a>
-        )}
+        {/* The dashboard is not part of the site: run `npx speakeasy admin` in a
+            terminal to mint and curate variants. A real deploy never ships it. */}
       </footer>
     </main>
   )

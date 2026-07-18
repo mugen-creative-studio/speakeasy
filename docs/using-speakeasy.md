@@ -27,11 +27,6 @@ It opens the dashboard in your browser automatically. Keep the terminal window
 open while you work; closing it (or pressing Ctrl+C) just closes the dashboard,
 never your site. This works on any site, whatever it is built with.
 
-> If whoever installed speakeasy set you up the older way instead, they will
-> have given you a command like `npm run dev` to run, then an address like
-> `http://localhost:5173/admin` to open. Either way you land on the same
-> dashboard.
-
 ## Create and share a link
 
 1. In the dashboard, choose **New variant**.
