@@ -65,10 +65,18 @@ export async function readProjects(dir, { root = process.cwd() } = {}) {
 // The server-side content source over the folder. Matches the content-source
 // contract in content.js: items() returns {id,title,meta,visibility[,data]},
 // with `data` present only for private projects.
-export function createFileContentSource(dir, { root = process.cwd() } = {}) {
+export function createFileContentSource(dir, { root = process.cwd(), catalogFile } = {}) {
   const abs = resolveDir(dir, root)
+  // Where the browser's public catalog is written. Defaults to inside the
+  // content dir; hosts point it at a bundled path (e.g. src/content.public.json).
+  const catalog = catalogFile
+    ? path.isAbsolute(catalogFile)
+      ? catalogFile
+      : path.join(root, catalogFile)
+    : path.join(abs, CATALOG_BASENAME)
   return {
     dir: abs,
+    catalogFile: catalog,
     async items() {
       const projects = await readProjects(abs, { root })
       return projects.map((p) => {
@@ -76,6 +84,11 @@ export function createFileContentSource(dir, { root = process.cwd() } = {}) {
         if (p.visibility === 'private') row.data = renderPayload(p)
         return row
       })
+    },
+    // The dashboard toggle. Its presence is what tells the admin this source can
+    // change visibility (a custom CMS/DB source without it is treated read-only).
+    setVisibility(id, visibility) {
+      return setProjectVisibility(abs, id, visibility, { root, catalogFile: catalog })
     },
   }
 }
@@ -118,8 +131,11 @@ export async function setProjectVisibility(
   assertProject(project, `${id}.json`)
   project.visibility = visibility
   await fs.writeFile(file, JSON.stringify(project, null, 2) + '\n')
-  await writePublicCatalog(abs, catalogFile ?? path.join(abs, CATALOG_BASENAME), { root })
-  return visibility
+  const catalog = catalogFile ?? path.join(abs, CATALOG_BASENAME)
+  await writePublicCatalog(abs, catalog, { root })
+  // Report the files touched so a git-backed admin can commit + push exactly
+  // these (the project file and the regenerated catalog) to deploy the change.
+  return { visibility, projectFile: file, catalogFile: catalog }
 }
 
 export { CATALOG_BASENAME }

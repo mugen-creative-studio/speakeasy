@@ -3,6 +3,7 @@ export {
   handleListVariants,
   handleCreate,
   handlePatch,
+  handleSetVisibility,
   handleLookup,
 } from './handlers.js'
 export { createContext } from './context.js'

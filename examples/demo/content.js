@@ -19,4 +19,8 @@ import { createFileContentSource } from '@speakeasy/server'
 
 const here = path.dirname(fileURLToPath(import.meta.url))
 
-export default createFileContentSource(path.join(here, 'content'))
+// The admin toggle regenerates the browser's public catalog at this bundled
+// path, so a public/private change is reflected on the next dev reload / build.
+export default createFileContentSource(path.join(here, 'content'), {
+  catalogFile: path.join(here, 'src/content.public.json'),
+})

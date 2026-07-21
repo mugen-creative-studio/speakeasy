@@ -528,6 +528,95 @@ function makeManageView(items) {
   return el('div', { class: 'sk-panel' }, tabs, listWrap)
 }
 
+// Projects view: flip each project between public and private. Public projects
+// show on the site; private ones are hidden and only revealed through a live
+// link. The switch calls PATCH /items/<id> {visibility}, which rewrites the
+// content file and regenerates the public catalog (and, under git storage,
+// commits + pushes). Mutates the shared `items` so Create/Manage see the change.
+function makeProjectsView(items) {
+  const listWrap = el('div')
+
+  function projectRow(p) {
+    let busy = false
+    const status = el('span', { class: 'sk-toggle-meta', text: p.meta || '' })
+    const seg = el('div', { class: 'sk-pill-row', role: 'group', 'aria-label': 'Visibility' })
+
+    function paint() {
+      seg.replaceChildren(
+        ...[
+          { v: 'public', label: 'Public' },
+          { v: 'private', label: 'Private' },
+        ].map(({ v, label }) => {
+          const b = el('button', {
+            type: 'button',
+            class: 'sk-pill' + (p.visibility === v ? ' sk-pill-active' : ''),
+            'aria-pressed': p.visibility === v ? 'true' : 'false',
+            onClick: () => setVis(v),
+          })
+          b.textContent = label
+          return b
+        }),
+      )
+    }
+
+    async function setVis(v) {
+      if (busy || p.visibility === v) return
+      busy = true
+      status.textContent = 'Saving…'
+      try {
+        const r = await sendJSON(`${API}/items/${encodeURIComponent(p.id)}`, 'PATCH', {
+          visibility: v,
+        })
+        if (r && r.error) {
+          status.textContent =
+            r.error === 'read_only'
+              ? 'This content source can’t be changed from the dashboard.'
+              : 'Failed: ' + r.error
+        } else {
+          p.visibility = v
+          status.textContent =
+            (v === 'private'
+              ? 'Now private — hidden from the public site'
+              : 'Now public — shown on the public site') + (r.pushed ? ' · pushed' : '')
+          paint()
+        }
+      } catch (err) {
+        status.textContent = 'Failed: ' + String(err)
+      }
+      busy = false
+    }
+
+    paint()
+    return el(
+      'li',
+      { class: 'sk-toggle-row' },
+      seg,
+      el(
+        'span',
+        { class: 'sk-toggle-text' },
+        el('span', { class: 'sk-toggle-title', text: p.title }),
+        status,
+      ),
+    )
+  }
+
+  if (!items.length) {
+    listWrap.replaceChildren(el('p', { class: 'sk-empty', text: 'No projects found.' }))
+  } else {
+    listWrap.replaceChildren(el('ul', { class: 'sk-toggle-list' }, ...items.map(projectRow)))
+  }
+
+  return el(
+    'div',
+    { class: 'sk-panel' },
+    el('p', {
+      class: 'sk-subtitle',
+      text: 'Public projects appear on your site. Private projects are hidden and only revealed through a live link.',
+    }),
+    listWrap,
+  )
+}
+
 async function main() {
   const root = document.getElementById('root')
   let items = []
@@ -553,12 +642,15 @@ async function main() {
     [
       { label: 'Create', value: 'create' },
       { label: 'Manage', value: 'manage' },
+      { label: 'Projects', value: 'projects' },
     ],
     'create',
     (v) => {
       // Create keeps its node (so an in-progress form survives a round trip);
-      // Manage is rebuilt each open so it always shows fresh variants.
-      body.replaceChildren(v === 'create' ? createView : makeManageView(items))
+      // Manage and Projects are rebuilt each open so they show fresh state.
+      if (v === 'create') body.replaceChildren(createView)
+      else if (v === 'manage') body.replaceChildren(makeManageView(items))
+      else body.replaceChildren(makeProjectsView(items))
     },
   )
   header.append(tabs)

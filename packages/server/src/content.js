@@ -30,15 +30,33 @@ export function loadContent(spec, { root = process.cwd() } = {}) {
   if (spec && typeof spec.items === 'function') return spec
   if (typeof spec === 'string') {
     const abs = path.isAbsolute(spec) ? spec : path.join(root, spec)
+    // Re-import (cache-busted) on every call, so newly added content and edits
+    // show up without restarting the server.
+    async function load() {
+      const href = pathToFileURL(abs).href + `?t=${Date.now()}`
+      const mod = await import(href)
+      const source = mod.default ?? mod.content
+      if (!source || typeof source.items !== 'function') {
+        throw new Error(`content module "${spec}" must export an object with an items() method`)
+      }
+      return source
+    }
     return {
       async items() {
-        const href = pathToFileURL(abs).href + `?t=${Date.now()}`
-        const mod = await import(href)
-        const source = mod.default ?? mod.content
-        if (!source || typeof source.items !== 'function') {
-          throw new Error(`content module "${spec}" must export an object with an items() method`)
+        return (await load()).items()
+      },
+      // Forward the optional visibility toggle to the underlying module. A module
+      // that doesn't implement it (a custom CMS/DB source) signals READ_ONLY, and
+      // handleSetVisibility turns that into a read_only response - the toggle is
+      // simply not offered there.
+      async setVisibility(id, visibility) {
+        const source = await load()
+        if (typeof source.setVisibility !== 'function') {
+          const err = new Error(`content module "${spec}" does not support changing visibility`)
+          err.code = 'READ_ONLY'
+          throw err
         }
-        return source.items()
+        return source.setVisibility(id, visibility)
       },
     }
   }

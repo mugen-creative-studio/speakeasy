@@ -6,6 +6,25 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+- Built-in file content layout (`createFileContentSource`, `writePublicCatalog`,
+  `setProjectVisibility`): an optional convention where each project is a JSON
+  file with a `visibility` field, the server reads them all, and a PUBLIC-only
+  catalog is generated for the browser to import.
+- Admin **Projects** tab + `PATCH /__speakeasy/items/<id>`: flip a project
+  public/private from the dashboard. Flipping rewrites the project file and
+  regenerates the public catalog, so a project marked private physically leaves
+  the next build - no hand-moving files. Under `git` storage the toggle commits
+  and pushes the changed files (the flip is the deploy); a custom `items()`
+  source without the layout shows the toggle as read-only. (SPK-17)
+
+### Changed
+- `loadContent` forwards an optional `setVisibility` from a path-based content
+  module, so the dashboard toggle works when `content` is a module path (not
+  only a direct object).
+- The demo now uses the built-in file layout (`examples/demo/content/`) instead
+  of a hand-authored `content.js` + `publicCatalog.js`.
+
 ## [0.2.0] - 2026-07-20
 
 ### Added
