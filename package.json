@@ -1,6 +1,6 @@
 {
   "name": "speakeasy-monorepo",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "private": true,
   "description": "Confidential content variants behind unguessable slugs - stack-agnostic core, server adapters, and CLI (with a standalone browser dashboard).",
   "type": "module",

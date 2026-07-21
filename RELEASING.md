@@ -1,6 +1,6 @@
 # Releasing
 
-All four packages (`@speakeasy/core`, `server`, `cli`, `admin`) publish together
+All three packages (`@speakeasy/core`, `server`, `cli`) publish together
 at a single shared version. Internal dependencies are exact-pinned, so versions
 must move in lockstep - `npm run version:bump` handles that for you.
 
@@ -20,7 +20,7 @@ These are manual and cannot be scripted:
    publish below and basic account-theft hygiene.
 3. **Bootstrap the first publish (once per package).** A trusted publisher is
    configured in each package's npmjs.com settings, which requires the package
-   to already exist. So publish the first version of all four manually:
+   to already exist. So publish the first version of all three manually:
    ```bash
    npm login                       # completes with 2FA
    npm run prerelease              # format:check + tests
@@ -28,7 +28,7 @@ These are manual and cannot be scripted:
    ```
    (This first version publishes without provenance; every later CI release has
    it.)
-4. **Register the trusted publisher.** For each of the four packages, on
+4. **Register the trusted publisher.** For each of the three packages, on
    npmjs.com -> the package -> **Settings -> Trusted Publisher**, add:
    - Provider: **GitHub Actions**
    - Repository: `mugen-creative-studio/speakeasy`

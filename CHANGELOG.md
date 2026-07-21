@@ -6,6 +6,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-07-20
+
 ### Added
 - `speakeasy admin`: a standalone, browser-based dashboard that runs on any
   project with one command (no Vite or React, no dev server). It serves a
