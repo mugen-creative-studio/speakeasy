@@ -5,7 +5,10 @@
   "type": "module",
   "description": "Runnable demo: a design-studio site whose secret variants reveal NDA'd case studies. Localhost-only, fs storage, the reference implementation INSTALL.md points at.",
   "scripts": {
+    "catalog": "node scripts/gen-catalog.mjs",
+    "predev": "npm run catalog",
     "dev": "vite",
+    "prebuild": "npm run catalog",
     "build": "vite build",
     "preview": "vite preview"
   },

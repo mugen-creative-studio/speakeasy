@@ -27,6 +27,8 @@ export interface Storage {
   kind?: string
   read(): Manifest | Promise<Manifest>
   persist(manifest: Manifest, message?: string): Promise<void>
+  /** git storage only: commit + push arbitrary paths (used by a visibility toggle). */
+  commitPaths?(paths: string[], message?: string): Promise<void>
 }
 
 export interface Verifier {
@@ -74,6 +76,12 @@ export declare function handlePatch(
     | { action: 'setDuration'; durationDays?: number | null }
     | { action: 'setItems'; items?: string[] },
 ): Promise<MutationResult | { error: string }>
+/** Flip a project's visibility. Returns read_only if the source can't set it. */
+export declare function handleSetVisibility(
+  ctx: Context,
+  id: string,
+  visibility: 'public' | 'private',
+): Promise<{ id: string; visibility: 'public' | 'private'; pushed: boolean } | { error: string }>
 /** The public lookup. Unknown/deactivated/expired all return an identical 404. */
 export declare function handleLookup(
   ctx: Context,
@@ -106,6 +114,51 @@ export declare function loadContent(
   opts?: { root?: string },
 ): ContentSource
 export declare function toRow(item: ContentItem): ContentRow
+
+/** A single project file in the built-in content layout. */
+export interface Project {
+  id: string
+  title: string
+  meta?: string | null
+  visibility: 'public' | 'private'
+  data?: Record<string, unknown>
+}
+/** A flattened public-catalog entry: id/title/meta plus the spread render payload. */
+export type PublicCatalogEntry = { id: string; title: string; meta: string | null } & Record<
+  string,
+  unknown
+>
+
+/** The files a visibility change touched, so a git-backed admin can commit them. */
+export interface VisibilityChange {
+  visibility: 'public' | 'private'
+  projectFile: string
+  catalogFile: string
+}
+/** A content source backed by the built-in file layout. */
+export interface FileContentSource extends ContentSource {
+  dir: string
+  catalogFile: string
+  setVisibility(id: string, visibility: 'public' | 'private'): Promise<VisibilityChange>
+}
+
+export declare const CATALOG_BASENAME: string
+export declare function readProjects(dir: string, opts?: { root?: string }): Promise<Project[]>
+export declare function createFileContentSource(
+  dir: string,
+  opts?: { root?: string; catalogFile?: string },
+): FileContentSource
+export declare function writePublicCatalog(
+  dir: string,
+  outFile: string,
+  opts?: { root?: string },
+): Promise<PublicCatalogEntry[]>
+export declare function setProjectVisibility(
+  dir: string,
+  id: string,
+  visibility: 'public' | 'private',
+  opts?: { root?: string; catalogFile?: string },
+): Promise<VisibilityChange>
 
 export declare function createGitStorage(opts?: { root?: string; manifestPath?: string }): Storage
 export declare function createFsStorage(opts?: { root?: string; manifestPath?: string }): Storage

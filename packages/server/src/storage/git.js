@@ -21,17 +21,12 @@ export function createGitStorage({
     return JSON.parse(readFileSync(abs, 'utf8'))
   }
 
-  async function persist(manifest, message) {
-    // Atomic write (temp + rename) so a crash mid-write can't stage a truncated,
-    // unparseable manifest.
-    const tmp = abs + '.tmp'
-    writeFileSync(tmp, JSON.stringify(manifest, null, 2) + '\n')
-    renameSync(tmp, abs)
-    await run('git', ['add', '--', rel], { cwd: root })
-    // Skip the commit when nothing actually changed (e.g. re-saving an
-    // identical set). `git diff --cached --quiet` exits 0 when nothing is
-    // staged, non-zero (throws) when there is - otherwise `git commit` would
-    // exit non-zero on an empty diff and the whole call would 500.
+  // Stage the given repo-relative paths, commit only if something actually
+  // changed, and push. `git diff --cached --quiet` exits 0 when nothing is
+  // staged and non-zero (throws) when there is - otherwise `git commit` would
+  // exit non-zero on an empty diff and the whole call would 500.
+  async function commitAndPush(relPaths, message) {
+    await run('git', ['add', '--', ...relPaths], { cwd: root })
     let staged = true
     try {
       await run('git', ['diff', '--cached', '--quiet'], { cwd: root })
@@ -43,5 +38,23 @@ export function createGitStorage({
     await run('git', ['push'], { cwd: root })
   }
 
-  return { kind: 'git', read, persist }
+  async function persist(manifest, message) {
+    // Atomic write (temp + rename) so a crash mid-write can't stage a truncated,
+    // unparseable manifest.
+    const tmp = abs + '.tmp'
+    writeFileSync(tmp, JSON.stringify(manifest, null, 2) + '\n')
+    renameSync(tmp, abs)
+    await commitAndPush([rel], message)
+  }
+
+  // Commit + push arbitrary files (e.g. the content layout a visibility toggle
+  // rewrote). Paths may be absolute or relative to root; they're normalized to
+  // repo-relative and prefixed with `--` so a name starting with `-` can't be
+  // read as a git flag.
+  async function commitPaths(paths, message) {
+    const rels = paths.map((p) => path.relative(root, path.isAbsolute(p) ? p : path.join(root, p)))
+    await commitAndPush(rels, message)
+  }
+
+  return { kind: 'git', read, persist, commitPaths }
 }

@@ -3,7 +3,13 @@
 // touch the filesystem, this Node-side handler does. Mount it in a Vite dev
 // server (see vite-plugin.js), an Express app, or any connect stack.
 
-import { handleListItems, handleListVariants, handleCreate, handlePatch } from './handlers.js'
+import {
+  handleListItems,
+  handleListVariants,
+  handleCreate,
+  handlePatch,
+  handleSetVisibility,
+} from './handlers.js'
 
 function sendJson(res, status, body) {
   res.statusCode = status
@@ -48,6 +54,12 @@ export function createAdminMiddleware(ctx, { basePath = '/__speakeasy' } = {}) {
       if (req.method === 'PATCH' && pathname.startsWith(`${basePath}/variants/`)) {
         const slug = decodeURIComponent(pathname.split('/').pop())
         const result = await handlePatch(ctx, slug, await readBody(req))
+        return sendJson(res, result.error ? 400 : 200, result)
+      }
+      if (req.method === 'PATCH' && pathname.startsWith(`${basePath}/items/`)) {
+        const id = decodeURIComponent(pathname.slice(`${basePath}/items/`.length))
+        const body = await readBody(req)
+        const result = await handleSetVisibility(ctx, id, body.visibility)
         return sendJson(res, result.error ? 400 : 200, result)
       }
       return sendJson(res, 404, { error: 'not_found' })

@@ -1,0 +1,10 @@
+{
+  "id": "case-alpha",
+  "title": "Lumen - Banking App",
+  "meta": "Acme Financial",
+  "visibility": "public",
+  "data": {
+    "summary": "A ground-up redesign of a retail banking app, from onboarding to payments.",
+    "body": "We rebuilt Lumen around a single principle: every screen answers \"where is my money, and what can I do with it right now?\" Onboarding dropped from 11 steps to 4, and weekly active use rose 38% in the first quarter after launch."
+  }
+}

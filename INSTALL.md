@@ -99,6 +99,51 @@ only *private* `data` travels over the wire, and only when a live slug requests
 it. If your site fetches all content per request (no public catalog in the
 bundle), rethink what "public versus private" means for you before proceeding.
 
+### Optional: the built-in file layout (a dashboard public/private toggle)
+
+Writing `items()` by hand means changing a project's visibility is a code edit:
+you move its payload between the public bundle and the server-only source. If you
+want the owner to flip that from the dashboard instead, use the built-in layout.
+
+Put one JSON file per project in a folder, each carrying a `visibility` field:
+
+```
+content/case-alpha.json        { "id": "case-alpha", "title": "…", "visibility": "public",  "data": { … } }
+content/case-nightingale.json  { "id": "case-nightingale", "title": "…", "visibility": "private", "data": { … } }
+```
+
+Then your content source and public catalog are both derived from that folder:
+
+```js
+// content.js
+import { fileURLToPath } from 'node:url'
+import path from 'node:path'
+import { createFileContentSource } from '@speakeasy/server'
+
+const here = path.dirname(fileURLToPath(import.meta.url))
+export default createFileContentSource(path.join(here, 'content'), {
+  // Where the PUBLIC-only catalog is written for the browser to import.
+  catalogFile: path.join(here, 'src/content.public.json'),
+})
+```
+
+Generate the public catalog before dev/build, and import it in the client (never
+import the raw `content/` folder - that would ship private payloads):
+
+```js
+// a prebuild step: node -e "import('@speakeasy/server').then(m => m.writePublicCatalog('content','src/content.public.json'))"
+// in the client:
+import PUBLIC_CASES from './content.public.json' // PUBLIC projects only
+```
+
+Now the admin's **Projects** tab shows a public/private switch per project.
+Flipping it rewrites the project file **and** regenerates `content.public.json`,
+so a project marked private physically leaves the next build - no hand-moving
+files. Under `git` storage the toggle also commits and pushes those two files, so
+the flip is the deploy. A custom `items()` source (no built-in layout) simply
+shows the toggle as read-only. See the demo's
+[`content.js`](examples/demo/content.js) for the full wiring.
+
 ## 4. Storage adapter - how the manifest persists
 
 - **`git`:** the manifest is a committed file. `persist` writes, commits, and
@@ -135,6 +180,10 @@ so it works on any project (Next.js, webpack, plain static, anything). It is
 local-only and never deployed - the same security model as the plugin below.
 This is what [`docs/using-speakeasy.md`](docs/using-speakeasy.md) tells the owner
 to run, so hand them that guide and you are done.
+
+The dashboard has three tabs: **Create** (mint a link), **Manage** (edit or
+revoke existing links), and **Projects** (flip each project public or private -
+active only with the built-in file layout from §3; read-only otherwise).
 
 **b) The admin API in your own dev server (advanced, optional).** `speakeasy
 admin` (5a) is the dashboard, and covers this for every stack. If you would

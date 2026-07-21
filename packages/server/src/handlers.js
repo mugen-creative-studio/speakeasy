@@ -114,6 +114,41 @@ export async function handlePatch(ctx, slug, body) {
   return { ...decorate(ctx, slug, entry), verified, orphans }
 }
 
+// PATCH - flip one project between public and private. Only works when the
+// content source implements setVisibility (the built-in file layout does; a
+// custom CMS/DB source is treated read-only). Under git storage the changed
+// content files are committed + pushed, so the toggle is the deploy.
+export async function handleSetVisibility(ctx, id, visibility) {
+  if (visibility !== 'public' && visibility !== 'private') return { error: 'bad_visibility' }
+  const source = ctx.content
+  if (typeof source.setVisibility !== 'function') return { error: 'read_only' }
+
+  const items = await source.items()
+  if (!items.some((i) => i.id === id)) return { error: 'not_found' }
+
+  // The source may be a loadContent() wrapper that always exposes setVisibility
+  // but forwards to a module without one - it throws READ_ONLY in that case.
+  let change
+  try {
+    change = await source.setVisibility(id, visibility)
+  } catch (err) {
+    if (err && err.code === 'READ_ONLY') return { error: 'read_only' }
+    throw err
+  }
+
+  // With git storage a content change only goes live once it is pushed. fs
+  // storage needs no commit - the files on disk are already what gets served.
+  let pushed = false
+  if (ctx.storage?.kind === 'git' && typeof ctx.storage.commitPaths === 'function') {
+    await ctx.storage.commitPaths(
+      [change.projectFile, change.catalogFile],
+      ctx.commitMessage ?? `chore: set ${id} ${visibility}`,
+    )
+    pushed = true
+  }
+  return { id, visibility, pushed }
+}
+
 // The public lookup - the production endpoint a visitor's slug request hits.
 // Returns a plain { status, body } so any host (serverless function, Express
 // route) can map it onto its own response object. Unknown, deactivated, and

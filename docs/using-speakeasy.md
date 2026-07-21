@@ -48,6 +48,20 @@ confirms the change is live, the link is dead: the person who had it now sees
 the same "not found" page as everyone else, with no sign the page ever
 existed. Expiry dates do the same thing automatically.
 
+## Hide or show a whole project
+
+The **Projects** tab lists everything on your site with a **Public / Private**
+switch. Public projects show on your normal site for anyone. Private projects are
+hidden from your site and only ever appear inside a link you share.
+
+Flip a project to **Private** and it drops off your public site the next time the
+site updates - you don't move any files yourself. Flip it back to **Public** and
+it returns. This is how you take a finished project off the public site while
+still being able to show it privately through a link.
+
+(If your site was set up with a custom content system, this switch may be shown
+but not clickable - ask whoever installed it.)
+
 ## The rules that keep it safe
 
 - **The link is the only key.** Treat each link like a password: send it to
