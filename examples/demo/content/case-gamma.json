@@ -1,0 +1,10 @@
+{
+  "id": "case-gamma",
+  "title": "Mesa - Commerce Redesign",
+  "meta": "Initech",
+  "visibility": "public",
+  "data": {
+    "summary": "Rethinking checkout for a high-volume marketplace.",
+    "body": "Mesa's checkout was leaking buyers at payment. We cut the flow to a single reviewable page, added express paths, and recovered an estimated 12% of abandoned carts within two months."
+  }
+}

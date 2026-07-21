@@ -1,0 +1,10 @@
+{
+  "id": "case-nightingale",
+  "title": "Project Nightingale",
+  "meta": "Stealth Health · under NDA",
+  "visibility": "private",
+  "data": {
+    "summary": "A confidential clinical dashboard for a pre-launch health startup.",
+    "body": "Nightingale gives care teams a single triage view across thousands of remote patients. We designed the alerting model, the escalation flows, and the at-a-glance vitals timeline. Unannounced - shared here only with people holding a live link."
+  }
+}

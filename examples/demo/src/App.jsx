@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
-import { PUBLIC_CASES } from './publicCatalog.js'
+// Generated from ../content by scripts/gen-catalog.mjs (predev/prebuild). Only
+// PUBLIC projects land here, so nothing private ships in the browser bundle.
+import PUBLIC_CASES from './content.public.json'
 
 // A deliberately tiny router. Two destinations:
 //   /        → the public site (everyone sees this; public cases only)

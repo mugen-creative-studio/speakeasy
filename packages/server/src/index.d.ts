@@ -107,6 +107,38 @@ export declare function loadContent(
 ): ContentSource
 export declare function toRow(item: ContentItem): ContentRow
 
+/** A single project file in the built-in content layout. */
+export interface Project {
+  id: string
+  title: string
+  meta?: string | null
+  visibility: 'public' | 'private'
+  data?: Record<string, unknown>
+}
+/** A flattened public-catalog entry: id/title/meta plus the spread render payload. */
+export type PublicCatalogEntry = { id: string; title: string; meta: string | null } & Record<
+  string,
+  unknown
+>
+
+export declare const CATALOG_BASENAME: string
+export declare function readProjects(dir: string, opts?: { root?: string }): Promise<Project[]>
+export declare function createFileContentSource(
+  dir: string,
+  opts?: { root?: string },
+): ContentSource & { dir: string }
+export declare function writePublicCatalog(
+  dir: string,
+  outFile: string,
+  opts?: { root?: string },
+): Promise<PublicCatalogEntry[]>
+export declare function setProjectVisibility(
+  dir: string,
+  id: string,
+  visibility: 'public' | 'private',
+  opts?: { root?: string; catalogFile?: string },
+): Promise<'public' | 'private'>
+
 export declare function createGitStorage(opts?: { root?: string; manifestPath?: string }): Storage
 export declare function createFsStorage(opts?: { root?: string; manifestPath?: string }): Storage
 

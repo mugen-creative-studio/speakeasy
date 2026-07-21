@@ -1,0 +1,10 @@
+{
+  "id": "case-beta",
+  "title": "Orbit - Design System",
+  "meta": "Globex",
+  "visibility": "public",
+  "data": {
+    "summary": "A 40-component design system unifying six product teams on one language.",
+    "body": "Orbit replaced four divergent component libraries with one tokenized system. Design-to-ship time for a new screen fell from days to hours, and accessibility audits went from manual to automated in CI."
+  }
+}
